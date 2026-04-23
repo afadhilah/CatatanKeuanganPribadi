@@ -82,7 +82,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun CatatanKeuanganPribadiTheme(
+fun ArtharumTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {

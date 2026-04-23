@@ -2,26 +2,19 @@ package com.example.catatankeuanganpribadi.presentation.addtransaction
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.catatankeuanganpribadi.domain.model.Account
-import com.example.catatankeuanganpribadi.domain.model.AccountType
-import com.example.catatankeuanganpribadi.domain.model.SaveTransactionRequest
-import com.example.catatankeuanganpribadi.domain.model.TransactionType
+import com.example.catatankeuanganpribadi.domain.model.*
 import com.example.catatankeuanganpribadi.domain.repository.AccountRepository
 import com.example.catatankeuanganpribadi.domain.repository.CategoryRepository
+import com.example.catatankeuanganpribadi.domain.repository.TransactionRepository
 import com.example.catatankeuanganpribadi.domain.usecase.SaveTransactionUseCase
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class AddTransactionViewModel(
+    private val transactionId: Long,
     private val accountRepository: AccountRepository,
     private val categoryRepository: CategoryRepository,
+    private val transactionRepository: TransactionRepository,
     private val saveTransactionUseCase: SaveTransactionUseCase
 ) : ViewModel() {
 
@@ -36,6 +29,26 @@ class AddTransactionViewModel(
             // Start observing data after seeding
             launch { observeAccounts() }
             launch { observeCategories() }
+
+            if (transactionId != -1L) {
+                loadTransaction(transactionId)
+            }
+        }
+    }
+
+    private suspend fun loadTransaction(id: Long) {
+        val transaction = transactionRepository.getTransaction(id) ?: return
+        _uiState.update { state ->
+            state.copy(
+                selectedType = transaction.type,
+                amountInput = transaction.amount.toString(),
+                selectedAccountId = transaction.accountId,
+                selectedTransferAccountId = transaction.transferAccountId,
+                selectedCategoryId = transaction.categoryId,
+                dateTime = transaction.dateTime,
+                note = transaction.note.orEmpty(),
+                isLoading = false
+            )
         }
     }
 
@@ -52,7 +65,6 @@ class AddTransactionViewModel(
     }
 
     private suspend fun observeCategories() {
-        // Observe selectedType changes and switch category observation
         _uiState.map { it.selectedType }
             .distinctUntilChanged()
             .flatMapLatest { type ->
@@ -115,6 +127,10 @@ class AddTransactionViewModel(
         _uiState.update { it.copy(selectedCategoryId = categoryId, errorMessage = null) }
     }
 
+    fun updateDateTime(dateTime: Long) {
+        _uiState.update { it.copy(dateTime = dateTime) }
+    }
+
     fun updateNote(note: String) {
         _uiState.update { it.copy(note = note) }
     }
@@ -140,6 +156,7 @@ class AddTransactionViewModel(
             runCatching {
                 saveTransactionUseCase(
                     SaveTransactionRequest(
+                        id = if (transactionId != -1L) transactionId else 0L,
                         type = currentState.selectedType,
                         amount = amount,
                         accountId = accountId,
@@ -151,15 +168,8 @@ class AddTransactionViewModel(
                 )
             }.onSuccess {
                 _uiState.update {
-                    AddTransactionUiState(
-                        isLoading = false,
-                        selectedType = it.selectedType,
-                        accounts = it.accounts,
-                        categories = it.categories,
-                        selectedAccountId = it.selectedAccountId,
-                        selectedTransferAccountId = null,
-                        selectedCategoryId = if (it.selectedType == TransactionType.TRANSFER) null else it.categories.firstOrNull()?.id,
-                        dateTime = System.currentTimeMillis(),
+                    it.copy(
+                        isSaving = false,
                         saveCompleted = true
                     )
                 }

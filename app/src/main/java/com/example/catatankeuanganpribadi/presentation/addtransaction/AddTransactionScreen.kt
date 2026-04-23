@@ -1,81 +1,106 @@
 package com.example.catatankeuanganpribadi.presentation.addtransaction
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.ArrowDownward
-import androidx.compose.material.icons.rounded.ArrowUpward
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.material.icons.automirrored.rounded.CompareArrows
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuAnchorType
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.catatankeuanganpribadi.domain.model.TransactionType
 import com.example.catatankeuanganpribadi.presentation.FinanceViewModelFactory
 import com.example.catatankeuanganpribadi.presentation.util.Formatters
 import com.example.catatankeuanganpribadi.ui.theme.CoralRed
-import com.example.catatankeuanganpribadi.ui.theme.GradientEnd
-import com.example.catatankeuanganpribadi.ui.theme.GradientStart
 import com.example.catatankeuanganpribadi.ui.theme.MintGreen
 import com.example.catatankeuanganpribadi.ui.theme.TealBlue
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddTransactionScreen(
     onBackAfterSave: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: AddTransactionViewModel = viewModel(factory = FinanceViewModelFactory.addTransaction())
+    transactionId: Long = -1L,
+    viewModel: AddTransactionViewModel = viewModel(
+        key = if (transactionId != -1L) "edit_$transactionId" else "add",
+        factory = FinanceViewModelFactory.addTransaction(transactionId)
+    )
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    AddTransactionContent(
+        uiState = uiState,
+        onUpdateType = viewModel::updateType,
+        onUpdateAmount = viewModel::updateAmount,
+        onUpdateAccount = viewModel::updateAccount,
+        onUpdateTransferAccount = viewModel::updateTransferAccount,
+        onUpdateCategory = viewModel::updateCategory,
+        onUpdateDateTime = viewModel::updateDateTime,
+        onUpdateNote = viewModel::updateNote,
+        onSaveTransaction = viewModel::saveTransaction,
+        onConsumeSaveResult = viewModel::consumeSaveResult,
+        onBackAfterSave = onBackAfterSave,
+        modifier = modifier,
+        isEditMode = transactionId != -1L
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun AddTransactionContent(
+    uiState: AddTransactionUiState,
+    onUpdateType: (TransactionType) -> Unit,
+    onUpdateAmount: (String) -> Unit,
+    onUpdateAccount: (Long) -> Unit,
+    onUpdateTransferAccount: (Long) -> Unit,
+    onUpdateCategory: (Long) -> Unit,
+    onUpdateDateTime: (Long) -> Unit,
+    onUpdateNote: (String) -> Unit,
+    onSaveTransaction: () -> Unit,
+    onConsumeSaveResult: () -> Unit,
+    onBackAfterSave: () -> Unit,
+    modifier: Modifier = Modifier,
+    isEditMode: Boolean = false
+) {
+    var showDatePicker by remember { mutableStateOf(false) }
+    val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = uiState.dateTime
+    )
+
     LaunchedEffect(uiState.saveCompleted) {
         if (uiState.saveCompleted) {
-            viewModel.consumeSaveResult()
+            onConsumeSaveResult()
             onBackAfterSave()
+        }
+    }
+
+    if (showDatePicker) {
+        DatePickerDialog(
+            onDismissRequest = { showDatePicker = false },
+            confirmButton = {
+                TextButton(onClick = {
+                    datePickerState.selectedDateMillis?.let { onUpdateDateTime(it) }
+                    showDatePicker = false
+                }) { Text("Pilih") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDatePicker = false }) { Text("Batal") }
+            }
+        ) {
+            DatePicker(state = datePickerState)
         }
     }
 
@@ -84,10 +109,9 @@ fun AddTransactionScreen(
         contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // ── Header ──
         item {
             Text(
-                "Tambah Transaksi",
+                if (isEditMode) "Edit Transaksi" else "Tambah Transaksi",
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Bold
             )
@@ -100,19 +124,19 @@ fun AddTransactionScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 TransactionTypeChip(
-                    label = "Pengeluaran",
-                    icon = Icons.Rounded.ArrowUpward,
-                    selected = uiState.selectedType == TransactionType.EXPENSE,
-                    color = CoralRed,
-                    onClick = { viewModel.updateType(TransactionType.EXPENSE) },
-                    modifier = Modifier.weight(1f)
-                )
-                TransactionTypeChip(
                     label = "Pemasukan",
                     icon = Icons.Rounded.ArrowDownward,
                     selected = uiState.selectedType == TransactionType.INCOME,
                     color = MintGreen,
-                    onClick = { viewModel.updateType(TransactionType.INCOME) },
+                    onClick = { onUpdateType(TransactionType.INCOME) },
+                    modifier = Modifier.weight(1f)
+                )
+                TransactionTypeChip(
+                    label = "Pengeluaran",
+                    icon = Icons.Rounded.ArrowUpward,
+                    selected = uiState.selectedType == TransactionType.EXPENSE,
+                    color = CoralRed,
+                    onClick = { onUpdateType(TransactionType.EXPENSE) },
                     modifier = Modifier.weight(1f)
                 )
                 TransactionTypeChip(
@@ -120,10 +144,27 @@ fun AddTransactionScreen(
                     icon = Icons.AutoMirrored.Rounded.CompareArrows,
                     selected = uiState.selectedType == TransactionType.TRANSFER,
                     color = TealBlue,
-                    onClick = { viewModel.updateType(TransactionType.TRANSFER) },
+                    onClick = { onUpdateType(TransactionType.TRANSFER) },
                     modifier = Modifier.weight(1f)
                 )
             }
+        }
+
+        // ── Date Picker Field ──
+        item {
+            OutlinedTextField(
+                value = Formatters.longDate(uiState.dateTime),
+                onValueChange = {},
+                readOnly = true,
+                label = { Text("Tanggal Transaksi") },
+                modifier = Modifier.fillMaxWidth().clickable { showDatePicker = true },
+                leadingIcon = { Icon(Icons.Rounded.CalendarToday, contentDescription = null) },
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outline
+                ),
+                shape = RoundedCornerShape(14.dp)
+            )
         }
 
         // ── Amount Display ──
@@ -157,7 +198,7 @@ fun AddTransactionScreen(
         item {
             OutlinedTextField(
                 value = uiState.amountInput,
-                onValueChange = viewModel::updateAmount,
+                onValueChange = onUpdateAmount,
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text("Nominal (Rupiah)") },
                 placeholder = { Text("Contoh: 50000") },
@@ -177,7 +218,7 @@ fun AddTransactionScreen(
                 items(quickAmounts) { amount ->
                     FilterChip(
                         selected = uiState.amountInput == amount.toString(),
-                        onClick = { viewModel.updateAmount(amount.toString()) },
+                        onClick = { onUpdateAmount(amount.toString()) },
                         label = { Text(Formatters.rupiah(amount), style = MaterialTheme.typography.labelMedium) },
                         shape = RoundedCornerShape(12.dp),
                         colors = FilterChipDefaults.filterChipColors(
@@ -196,7 +237,7 @@ fun AddTransactionScreen(
                 selectedLabel = uiState.accounts.firstOrNull { it.id == uiState.selectedAccountId }
                     ?.let { "${it.name} • ${Formatters.rupiah(it.balance)}" }.orEmpty(),
                 options = uiState.accounts.map { it.id to "${it.name} — ${Formatters.rupiah(it.balance)}" },
-                onOptionSelected = viewModel::updateAccount
+                onOptionSelected = onUpdateAccount
             )
         }
 
@@ -210,7 +251,7 @@ fun AddTransactionScreen(
                     options = uiState.accounts
                         .filter { it.id != uiState.selectedAccountId }
                         .map { it.id to "${it.name} — ${Formatters.rupiah(it.balance)}" },
-                    onOptionSelected = { viewModel.updateTransferAccount(it) }
+                    onOptionSelected = { onUpdateTransferAccount(it) }
                 )
             }
         } else {
@@ -220,7 +261,7 @@ fun AddTransactionScreen(
                     selectedLabel = uiState.categories
                         .firstOrNull { it.id == uiState.selectedCategoryId }?.name.orEmpty(),
                     options = uiState.categories.map { it.id to it.name },
-                    onOptionSelected = { viewModel.updateCategory(it) }
+                    onOptionSelected = { onUpdateCategory(it) }
                 )
             }
         }
@@ -229,7 +270,7 @@ fun AddTransactionScreen(
         item {
             OutlinedTextField(
                 value = uiState.note,
-                onValueChange = viewModel::updateNote,
+                onValueChange = onUpdateNote,
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text("Catatan (opsional)") },
                 shape = RoundedCornerShape(14.dp),
@@ -254,7 +295,7 @@ fun AddTransactionScreen(
         // ── Save Button ──
         item {
             Button(
-                onClick = viewModel::saveTransaction,
+                onClick = onSaveTransaction,
                 enabled = !uiState.isSaving,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -265,7 +306,7 @@ fun AddTransactionScreen(
                 )
             ) {
                 Text(
-                    text = if (uiState.isSaving) "Menyimpan..." else "Simpan Transaksi",
+                    text = if (uiState.isSaving) "Menyimpan..." else if (isEditMode) "Update Transaksi" else "Simpan Transaksi",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -275,8 +316,6 @@ fun AddTransactionScreen(
         item { Spacer(Modifier.height(16.dp)) }
     }
 }
-
-// ─── Type Chip ───────────────────────────────────────────────
 
 @Composable
 private fun TransactionTypeChip(
@@ -315,8 +354,6 @@ private fun TransactionTypeChip(
         }
     }
 }
-
-// ─── Finance Dropdown (proper ExposedDropdownMenuBox) ──────
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

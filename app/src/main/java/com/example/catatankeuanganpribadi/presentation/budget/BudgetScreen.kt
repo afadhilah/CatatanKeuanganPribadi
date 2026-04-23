@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -38,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -48,19 +47,51 @@ import com.example.catatankeuanganpribadi.presentation.components.AnimatedBudget
 import com.example.catatankeuanganpribadi.presentation.components.EmptyState
 import com.example.catatankeuanganpribadi.presentation.components.PeriodFilterRow
 import com.example.catatankeuanganpribadi.presentation.components.SectionHeader
+import com.example.catatankeuanganpribadi.presentation.model.PeriodFilter
 import com.example.catatankeuanganpribadi.presentation.util.Formatters
 import com.example.catatankeuanganpribadi.ui.theme.AmberYellow
 import com.example.catatankeuanganpribadi.ui.theme.CoralRed
 import com.example.catatankeuanganpribadi.ui.theme.MintGreen
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BudgetScreen(
     modifier: Modifier = Modifier,
-    viewModel: BudgetViewModel = viewModel(factory = FinanceViewModelFactory.budget())
+    viewModel: BudgetViewModel? = null
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    if (LocalInspectionMode.current && viewModel == null) {
+        BudgetContent(
+            uiState = BudgetUiState(),
+            onUpdatePeriod = {},
+            onUpdateCategory = {},
+            onUpdateLimitAmount = {},
+            onSaveBudget = {},
+            modifier = modifier
+        )
+    } else {
+        val actualViewModel: BudgetViewModel = viewModel ?: viewModel(factory = FinanceViewModelFactory.budget())
+        val uiState by actualViewModel.uiState.collectAsStateWithLifecycle()
 
+        BudgetContent(
+            uiState = uiState,
+            onUpdatePeriod = actualViewModel::updatePeriod,
+            onUpdateCategory = actualViewModel::updateCategory,
+            onUpdateLimitAmount = actualViewModel::updateLimitAmount,
+            onSaveBudget = actualViewModel::saveBudget,
+            modifier = modifier
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun BudgetContent(
+    uiState: BudgetUiState,
+    onUpdatePeriod: (PeriodFilter) -> Unit,
+    onUpdateCategory: (Long) -> Unit,
+    onUpdateLimitAmount: (String) -> Unit,
+    onSaveBudget: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
@@ -79,7 +110,7 @@ fun BudgetScreen(
         item(key = "period") {
             PeriodFilterRow(
                 selected = uiState.selectedPeriod,
-                onSelected = viewModel::updatePeriod
+                onSelected = onUpdatePeriod
             )
         }
 
@@ -107,13 +138,13 @@ fun BudgetScreen(
                         selectedLabel = uiState.categories
                             .firstOrNull { it.id == uiState.selectedCategoryId }?.name.orEmpty(),
                         options = uiState.categories.map { it.id to it.name },
-                        onSelected = viewModel::updateCategory
+                        onSelected = onUpdateCategory
                     )
 
                     // Limit input
                     OutlinedTextField(
                         value = uiState.limitAmountInput,
-                        onValueChange = viewModel::updateLimitAmount,
+                        onValueChange = onUpdateLimitAmount,
                         modifier = Modifier.fillMaxWidth(),
                         label = { Text("Limit (Rupiah)") },
                         placeholder = { Text("Contoh: 500000") },
@@ -136,7 +167,7 @@ fun BudgetScreen(
 
                     // Save button
                     Button(
-                        onClick = viewModel::saveBudget,
+                        onClick = onSaveBudget,
                         enabled = !uiState.isSaving,
                         modifier = Modifier
                             .fillMaxWidth()

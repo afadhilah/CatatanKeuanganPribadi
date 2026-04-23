@@ -7,6 +7,8 @@ import com.example.catatankeuanganpribadi.FinanceApplication
 import com.example.catatankeuanganpribadi.presentation.addtransaction.AddTransactionViewModel
 import com.example.catatankeuanganpribadi.presentation.budget.BudgetViewModel
 import com.example.catatankeuanganpribadi.presentation.dashboard.DashboardViewModel
+import com.example.catatankeuanganpribadi.presentation.management.ManageAccountsViewModel
+import com.example.catatankeuanganpribadi.presentation.management.ManageCategoriesViewModel
 import com.example.catatankeuanganpribadi.presentation.statistics.StatisticsViewModel
 import com.example.catatankeuanganpribadi.presentation.transactionlist.TransactionListViewModel
 
@@ -19,10 +21,12 @@ object FinanceViewModelFactory {
         )
     }
 
-    fun addTransaction(): ViewModelProvider.Factory = factory { application ->
+    fun addTransaction(transactionId: Long = -1L): ViewModelProvider.Factory = factory { application ->
         AddTransactionViewModel(
+            transactionId = transactionId,
             accountRepository = application.container.accountRepository,
             categoryRepository = application.container.categoryRepository,
+            transactionRepository = application.container.transactionRepository,
             saveTransactionUseCase = application.container.saveTransactionUseCase
         )
     }
@@ -48,6 +52,14 @@ object FinanceViewModelFactory {
         StatisticsViewModel(
             observeTransactionsUseCase = application.container.observeTransactionsUseCase
         )
+    }
+
+    fun manageAccounts(): ViewModelProvider.Factory = factory { application ->
+        ManageAccountsViewModel(accountRepository = application.container.accountRepository)
+    }
+
+    fun manageCategories(): ViewModelProvider.Factory = factory { application ->
+        ManageCategoriesViewModel(categoryRepository = application.container.categoryRepository)
     }
 
     private fun <T : ViewModel> factory(

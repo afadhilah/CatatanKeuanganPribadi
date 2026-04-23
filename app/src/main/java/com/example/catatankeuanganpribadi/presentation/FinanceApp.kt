@@ -3,10 +3,6 @@ package com.example.catatankeuanganpribadi.presentation
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -30,8 +26,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
@@ -40,8 +34,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.catatankeuanganpribadi.presentation.navigation.FinanceNavGraph
 import com.example.catatankeuanganpribadi.presentation.navigation.FinanceDestination
-import com.example.catatankeuanganpribadi.ui.theme.GradientEnd
-import com.example.catatankeuanganpribadi.ui.theme.GradientStart
 
 private data class BottomNavItem(
     val label: String,
@@ -64,9 +56,17 @@ fun FinanceApp() {
         )
     }
 
+    // Bottom Bar muncul di Dashboard, Transactions, Budgets, dan Statistics
     val showBottomBar by remember(currentDestination) {
         derivedStateOf {
-            currentDestination?.route != FinanceDestination.AddTransaction.route
+            bottomDestinations.any { it.route == currentDestination?.route }
+        }
+    }
+
+    // FAB Tambah Transaksi muncul HANYA jika menu utama aktif
+    val showGlobalFab by remember(currentDestination) {
+        derivedStateOf {
+            showBottomBar
         }
     }
 
@@ -122,7 +122,7 @@ fun FinanceApp() {
             }
         },
         floatingActionButton = {
-            if (showBottomBar) {
+            if (showGlobalFab) {
                 FloatingActionButton(
                     onClick = { navController.navigate(FinanceDestination.AddTransaction.route) },
                     shape = RoundedCornerShape(16.dp),

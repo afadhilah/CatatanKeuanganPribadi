@@ -11,12 +11,15 @@ object Formatters {
     }
 
     private val shortDateFormatter = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
+    private val longDateFormatter = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale("id", "ID"))
     private val longDateTimeFormatter = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale("id", "ID"))
     private val dayHeaderFormatter = SimpleDateFormat("EEEE, dd MMM", Locale("id", "ID"))
 
     fun rupiah(amount: Long): String = currencyFormatter.format(amount)
 
     fun shortDate(timestamp: Long): String = shortDateFormatter.format(Date(timestamp))
+
+    fun longDate(timestamp: Long): String = longDateFormatter.format(Date(timestamp))
 
     fun longDateTime(timestamp: Long): String = longDateTimeFormatter.format(Date(timestamp))
 

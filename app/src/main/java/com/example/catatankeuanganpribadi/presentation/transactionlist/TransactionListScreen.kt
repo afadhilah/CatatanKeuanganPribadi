@@ -1,5 +1,6 @@
 package com.example.catatankeuanganpribadi.presentation.transactionlist
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -35,14 +37,57 @@ import com.example.catatankeuanganpribadi.presentation.FinanceViewModelFactory
 import com.example.catatankeuanganpribadi.presentation.components.EmptyState
 import com.example.catatankeuanganpribadi.presentation.components.PeriodFilterRow
 import com.example.catatankeuanganpribadi.presentation.components.TransactionRow
+import com.example.catatankeuanganpribadi.presentation.model.PeriodFilter
 import com.example.catatankeuanganpribadi.presentation.util.Formatters
 
 @Composable
 fun TransactionListScreen(
+    onEditTransaction: (Long) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: TransactionListViewModel = viewModel(factory = FinanceViewModelFactory.transactionList())
+    viewModel: TransactionListViewModel? = null
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    if (LocalInspectionMode.current && viewModel == null) {
+        TransactionListContent(
+            uiState = TransactionListUiState(),
+            onUpdatePeriod = {},
+            onUpdateSearchQuery = {},
+            onUpdateAccount = {},
+            onUpdateSortOption = {},
+            onUpdateCategory = {},
+            onDeleteTransaction = {},
+            onEditTransaction = onEditTransaction,
+            modifier = modifier
+        )
+    } else {
+        val actualViewModel: TransactionListViewModel = viewModel ?: viewModel(factory = FinanceViewModelFactory.transactionList())
+        val uiState by actualViewModel.uiState.collectAsStateWithLifecycle()
+
+        TransactionListContent(
+            uiState = uiState,
+            onUpdatePeriod = actualViewModel::updatePeriod,
+            onUpdateSearchQuery = actualViewModel::updateSearchQuery,
+            onUpdateAccount = actualViewModel::updateAccount,
+            onUpdateSortOption = actualViewModel::updateSortOption,
+            onUpdateCategory = actualViewModel::updateCategory,
+            onDeleteTransaction = actualViewModel::deleteTransaction,
+            onEditTransaction = onEditTransaction,
+            modifier = modifier
+        )
+    }
+}
+
+@Composable
+private fun TransactionListContent(
+    uiState: TransactionListUiState,
+    onUpdatePeriod: (PeriodFilter) -> Unit,
+    onUpdateSearchQuery: (String) -> Unit,
+    onUpdateAccount: (Long?) -> Unit,
+    onUpdateSortOption: (TransactionSortOption) -> Unit,
+    onUpdateCategory: (Long?) -> Unit,
+    onDeleteTransaction: (Long) -> Unit,
+    onEditTransaction: (Long) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val groupedTransactions = uiState.transactions.groupBy { Formatters.dayHeader(it.dateTime) }
 
     LazyColumn(
@@ -63,7 +108,7 @@ fun TransactionListScreen(
         item(key = "period") {
             PeriodFilterRow(
                 selected = uiState.selectedPeriod,
-                onSelected = viewModel::updatePeriod
+                onSelected = onUpdatePeriod
             )
         }
 
@@ -71,7 +116,7 @@ fun TransactionListScreen(
         item(key = "search") {
             OutlinedTextField(
                 value = uiState.searchQuery,
-                onValueChange = viewModel::updateSearchQuery,
+                onValueChange = onUpdateSearchQuery,
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = { Text("Cari catatan, kategori, akun...") },
                 leadingIcon = {
@@ -97,7 +142,7 @@ fun TransactionListScreen(
                     FilterChip(
                         selected = uiState.selectedAccountId == account.id,
                         onClick = {
-                            viewModel.updateAccount(
+                            onUpdateAccount(
                                 if (uiState.selectedAccountId == account.id) null else account.id
                             )
                         },
@@ -118,7 +163,7 @@ fun TransactionListScreen(
                 item {
                     FilterChip(
                         selected = uiState.sortOption == TransactionSortOption.LATEST,
-                        onClick = { viewModel.updateSortOption(TransactionSortOption.LATEST) },
+                        onClick = { onUpdateSortOption(TransactionSortOption.LATEST) },
                         label = { Text("Terbaru", style = MaterialTheme.typography.labelMedium) },
                         shape = RoundedCornerShape(12.dp),
                         colors = FilterChipDefaults.filterChipColors(
@@ -130,7 +175,7 @@ fun TransactionListScreen(
                 item {
                     FilterChip(
                         selected = uiState.sortOption == TransactionSortOption.AMOUNT_DESC,
-                        onClick = { viewModel.updateSortOption(TransactionSortOption.AMOUNT_DESC) },
+                        onClick = { onUpdateSortOption(TransactionSortOption.AMOUNT_DESC) },
                         label = { Text("Nominal ↓", style = MaterialTheme.typography.labelMedium) },
                         shape = RoundedCornerShape(12.dp),
                         colors = FilterChipDefaults.filterChipColors(
@@ -143,7 +188,7 @@ fun TransactionListScreen(
                     FilterChip(
                         selected = uiState.selectedCategoryId == category.id,
                         onClick = {
-                            viewModel.updateCategory(
+                            onUpdateCategory(
                                 if (uiState.selectedCategoryId == category.id) null else category.id
                             )
                         },
@@ -180,7 +225,8 @@ fun TransactionListScreen(
                 items(transactions, key = { it.id }) { transaction ->
                     TransactionRow(
                         transaction = transaction,
-                        onDelete = { viewModel.deleteTransaction(transaction.id) }
+                        onDelete = { onDeleteTransaction(transaction.id) },
+                        modifier = Modifier.clickable { onEditTransaction(transaction.id) }
                     )
                     if (transaction != transactions.last()) {
                         HorizontalDivider(

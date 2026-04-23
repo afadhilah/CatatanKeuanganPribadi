@@ -4,68 +4,103 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.Analytics
-import androidx.compose.material.icons.rounded.Savings
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.catatankeuanganpribadi.presentation.FinanceViewModelFactory
-import com.example.catatankeuanganpribadi.presentation.components.EmptyState
-import com.example.catatankeuanganpribadi.presentation.components.GradientHeroCard
-import com.example.catatankeuanganpribadi.presentation.components.PeriodFilterRow
-import com.example.catatankeuanganpribadi.presentation.components.SectionHeader
-import com.example.catatankeuanganpribadi.presentation.components.ShortcutChip
-import com.example.catatankeuanganpribadi.presentation.components.TransactionRow
+import com.example.catatankeuanganpribadi.presentation.components.*
+import com.example.catatankeuanganpribadi.presentation.model.PeriodFilter
 
 @Composable
 fun DashboardScreen(
     onAddTransaction: () -> Unit,
     onOpenBudget: () -> Unit,
     onOpenStatistics: () -> Unit,
+    onOpenSettings: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: DashboardViewModel = viewModel(factory = FinanceViewModelFactory.dashboard())
+    viewModel: DashboardViewModel? = null
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    if (LocalInspectionMode.current && viewModel == null) {
+        DashboardContent(
+            uiState = DashboardUiState(isLoading = false),
+            onUpdatePeriod = {},
+            onAddTransaction = onAddTransaction,
+            onOpenBudget = onOpenBudget,
+            onOpenStatistics = onOpenStatistics,
+            onOpenSettings = onOpenSettings,
+            modifier = modifier
+        )
+    } else {
+        val actualViewModel: DashboardViewModel = viewModel ?: viewModel(factory = FinanceViewModelFactory.dashboard())
+        val uiState by actualViewModel.uiState.collectAsStateWithLifecycle()
 
+        DashboardContent(
+            uiState = uiState,
+            onUpdatePeriod = actualViewModel::updatePeriod,
+            onAddTransaction = onAddTransaction,
+            onOpenBudget = onOpenBudget,
+            onOpenStatistics = onOpenStatistics,
+            onOpenSettings = onOpenSettings,
+            modifier = modifier
+        )
+    }
+}
+
+@Composable
+private fun DashboardContent(
+    uiState: DashboardUiState,
+    onUpdatePeriod: (PeriodFilter) -> Unit,
+    onAddTransaction: () -> Unit,
+    onOpenBudget: () -> Unit,
+    onOpenStatistics: () -> Unit,
+    onOpenSettings: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
+        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 20.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         // ── Greeting ──
         item(key = "greeting") {
-            Column {
-                Text(
-                    "Halo! 👋",
-                    style = MaterialTheme.typography.headlineLarge,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(Modifier.height(4.dp))
-                Text(
-                    "Pantau keuanganmu hari ini",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Top
+            ) {
+                Column {
+                    Text(
+                        "Halo! 👋",
+                        style = MaterialTheme.typography.headlineLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        "Pantau keuanganmu hari ini",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                
+                IconButton(onClick = onOpenSettings) {
+                    Icon(
+                        Icons.Rounded.Settings,
+                        contentDescription = "Pengaturan",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
         }
 
@@ -73,7 +108,7 @@ fun DashboardScreen(
         item(key = "period") {
             PeriodFilterRow(
                 selected = uiState.selectedPeriod,
-                onSelected = viewModel::updatePeriod
+                onSelected = onUpdatePeriod
             )
         }
 

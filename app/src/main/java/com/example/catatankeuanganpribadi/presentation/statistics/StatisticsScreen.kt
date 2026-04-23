@@ -1,7 +1,6 @@
 package com.example.catatankeuanganpribadi.presentation.statistics
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -21,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -34,16 +34,39 @@ import com.example.catatankeuanganpribadi.presentation.components.EmptyState
 import com.example.catatankeuanganpribadi.presentation.components.PeriodFilterRow
 import com.example.catatankeuanganpribadi.presentation.components.SectionHeader
 import com.example.catatankeuanganpribadi.presentation.components.chartColor
+import com.example.catatankeuanganpribadi.presentation.model.PeriodFilter
 import com.example.catatankeuanganpribadi.presentation.util.Formatters
 import kotlin.math.roundToInt
 
 @Composable
 fun StatisticsScreen(
     modifier: Modifier = Modifier,
-    viewModel: StatisticsViewModel = viewModel(factory = FinanceViewModelFactory.statistics())
+    viewModel: StatisticsViewModel? = null
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    if (LocalInspectionMode.current && viewModel == null) {
+        StatisticsContent(
+            uiState = StatisticsUiState(),
+            onUpdatePeriod = {},
+            modifier = modifier
+        )
+    } else {
+        val actualViewModel: StatisticsViewModel = viewModel ?: viewModel(factory = FinanceViewModelFactory.statistics())
+        val uiState by actualViewModel.uiState.collectAsStateWithLifecycle()
 
+        StatisticsContent(
+            uiState = uiState,
+            onUpdatePeriod = actualViewModel::updatePeriod,
+            modifier = modifier
+        )
+    }
+}
+
+@Composable
+private fun StatisticsContent(
+    uiState: StatisticsUiState,
+    onUpdatePeriod: (PeriodFilter) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val totalsByCategory = uiState.expenseTransactions
         .groupBy { it.categoryName ?: "Tanpa Kategori" }
         .mapValues { (_, items) -> items.sumOf { it.amount } }
@@ -78,7 +101,7 @@ fun StatisticsScreen(
         item(key = "period") {
             PeriodFilterRow(
                 selected = uiState.selectedPeriod,
-                onSelected = viewModel::updatePeriod
+                onSelected = onUpdatePeriod
             )
         }
 

@@ -4,6 +4,9 @@ import androidx.compose.ui.graphics.Color
 
 // ─── Midnight Finance Palette ────────────────────────────────
 
+// Brand Color (Match Header)
+val BrandNavy = Color(0xFF002B5B)
+
 // Base surfaces (dark)
 val DeepNavy = Color(0xFF0F1923)
 val MutedNavy = Color(0xFF1A2733)
