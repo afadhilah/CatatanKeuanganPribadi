@@ -143,7 +143,7 @@ fun GradientHeroCard(
                 Spacer(Modifier.height(4.dp))
                 Text(
                     text = Formatters.rupiah(totalBalance),
-                    style = MaterialTheme.typography.displayMedium,
+                    style = MaterialTheme.typography.displayMedium.copy(fontSize = 50.sp),
                     color = Color.White,
                     fontWeight = FontWeight.Bold
                 )

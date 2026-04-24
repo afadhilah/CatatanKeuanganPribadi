@@ -39,7 +39,7 @@ class CategoryRepositoryImpl(
 
     override suspend fun deleteCategory(categoryId: Long) {
         val category = categoryDao.getCategoryById(categoryId)
-        if (category != null) {
+        if (category != null && !category.isDefault) {
             categoryDao.deleteCategory(category)
         }
     }

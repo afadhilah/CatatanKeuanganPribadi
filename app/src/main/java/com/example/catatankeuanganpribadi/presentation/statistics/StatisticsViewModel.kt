@@ -24,11 +24,13 @@ class StatisticsViewModel(
         .flatMapLatest { period ->
             observeTransactionsUseCase(DateRangeFactory.create(period))
                 .map { transactions ->
+                    val incomeTransactions = transactions.filter { it.type == TransactionType.INCOME }
                     val expenseTransactions = transactions.filter { it.type == TransactionType.EXPENSE }
                     val insight = buildTopInsight(expenseTransactions)
                     StatisticsUiState(
                         isLoading = false,
                         selectedPeriod = period,
+                        incomeTransactions = incomeTransactions,
                         expenseTransactions = expenseTransactions,
                         topInsight = insight
                     )

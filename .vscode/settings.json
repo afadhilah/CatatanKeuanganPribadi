@@ -1,0 +1,15 @@
+{
+  "files.exclude": {
+    "**/.gradle": true,
+    "**/build": true,
+    "**/.kotlin": true,
+    "**/captures": true,
+    "**/.externalNativeBuild": true,
+    "**/.cxx": true
+  },
+  "search.exclude": {
+    "**/.gradle": true,
+    "**/build": true,
+    "**/.kotlin": true
+  }
+}

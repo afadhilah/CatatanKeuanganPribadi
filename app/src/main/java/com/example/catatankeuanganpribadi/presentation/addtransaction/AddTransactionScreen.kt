@@ -20,6 +20,9 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.catatankeuanganpribadi.domain.model.TransactionType
@@ -76,9 +79,6 @@ private fun AddTransactionContent(
     isEditMode: Boolean = false
 ) {
     var showDatePicker by remember { mutableStateOf(false) }
-    val datePickerState = rememberDatePickerState(
-        initialSelectedDateMillis = uiState.dateTime
-    )
 
     LaunchedEffect(uiState.saveCompleted) {
         if (uiState.saveCompleted) {
@@ -88,6 +88,10 @@ private fun AddTransactionContent(
     }
 
     if (showDatePicker) {
+        val datePickerState = rememberDatePickerState(
+            initialSelectedDateMillis = uiState.dateTime
+        )
+
         DatePickerDialog(
             onDismissRequest = { showDatePicker = false },
             confirmButton = {
@@ -152,19 +156,30 @@ private fun AddTransactionContent(
 
         // ── Date Picker Field ──
         item {
-            OutlinedTextField(
-                value = Formatters.longDate(uiState.dateTime),
-                onValueChange = {},
-                readOnly = true,
-                label = { Text("Tanggal Transaksi") },
-                modifier = Modifier.fillMaxWidth().clickable { showDatePicker = true },
-                leadingIcon = { Icon(Icons.Rounded.CalendarToday, contentDescription = null) },
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.outline
-                ),
-                shape = RoundedCornerShape(14.dp)
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { showDatePicker = true }
+            ) {
+                OutlinedTextField(
+                    value = Formatters.longDate(uiState.dateTime),
+                    onValueChange = {},
+                    readOnly = true,
+                    enabled = false,
+                    label = { Text("Tanggal Transaksi") },
+                    modifier = Modifier.fillMaxWidth(),
+                    leadingIcon = { Icon(Icons.Rounded.CalendarToday, contentDescription = null) },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                        disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        disabledLeadingIconColor = MaterialTheme.colorScheme.primary,
+                        disabledBorderColor = MaterialTheme.colorScheme.outline,
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline
+                    ),
+                    shape = RoundedCornerShape(14.dp)
+                )
+            }
         }
 
         // ── Amount Display ──
@@ -179,36 +194,35 @@ private fun AddTransactionContent(
                     .padding(vertical = 28.dp, horizontal = 20.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = uiState.amountInput.toLongOrNull()
+                TextField(
+                    value = uiState.amountInput.toLongOrNull()
                         ?.let { Formatters.rupiah(it) }
                         ?: "Rp0",
-                    style = MaterialTheme.typography.displayMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = if (uiState.amountInput.isNotEmpty())
-                        MaterialTheme.colorScheme.primary
-                    else
-                        MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
-                    textAlign = TextAlign.Center
+                    onValueChange = { input -> onUpdateAmount(input.filter(Char::isDigit)) },
+                    singleLine = true,
+                    textStyle = MaterialTheme.typography.displayMedium.copy(
+                        fontSize = 52.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                        color = if (uiState.amountInput.isNotEmpty()) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                        }
+                    ),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent,
+                        cursorColor = MaterialTheme.colorScheme.primary
+                    )
                 )
             }
-        }
-
-        // ── Amount Input ──
-        item {
-            OutlinedTextField(
-                value = uiState.amountInput,
-                onValueChange = onUpdateAmount,
-                modifier = Modifier.fillMaxWidth(),
-                label = { Text("Nominal (Rupiah)") },
-                placeholder = { Text("Contoh: 50000") },
-                singleLine = true,
-                shape = RoundedCornerShape(14.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.outline
-                )
-            )
         }
 
         // ── Quick Amount Chips ──

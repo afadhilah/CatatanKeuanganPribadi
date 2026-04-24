@@ -1,0 +1,169 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:sans-serif;background:transparent}
+.phone{width:280px;height:560px;margin:0 auto;border-radius:36px;overflow:hidden;position:relative;border:2px solid #3D35B5;background:#2D2680}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.4s,transform 0.4s}
+.screen.hidden{opacity:0;pointer-events:none;transform:translateX(30px)}
+
+.splash{background:#2D2680}
+.sekar-wrap{margin-bottom:24px}
+.wordmark{font-family:Georgia,serif;font-style:italic;font-size:32px;color:#C4C0FF;letter-spacing:6px;margin-bottom:6px;text-align:center}
+.tagline{font-size:11px;color:#8B85FF;letter-spacing:2px;text-align:center}
+
+.onboard{background:#F5F4FF;padding:32px 24px;justify-content:space-between}
+.ob-top{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ob-illo{width:160px;height:160px;border-radius:32px;background:#2D2680;display:flex;align-items:center;justify-content:center;margin-bottom:28px}
+.ob-title{font-size:20px;font-weight:700;color:#2D2680;text-align:center;margin-bottom:10px;line-height:1.3}
+.ob-desc{font-size:13px;color:#6C63FF;text-align:center;line-height:1.6}
+.ob-bottom{width:100%}
+.dots{display:flex;justify-content:center;gap:6px;margin-bottom:20px}
+.dot{width:6px;height:6px;border-radius:3px;background:#C4C0FF;transition:all 0.3s}
+.dot.active{width:20px;background:#6C63FF}
+.btn-primary{width:100%;padding:14px;background:#6C63FF;color:#fff;border:none;border-radius:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:sans-serif}
+.btn-skip{width:100%;padding:8px;background:none;color:#8884CC;border:none;font-size:12px;cursor:pointer;margin-top:8px;font-family:sans-serif}
+
+.status{position:absolute;top:16px;left:0;right:0;display:flex;justify-content:space-between;padding:0 20px;font-size:10px;color:rgba(255,255,255,0.5)}
+.status-dark{color:#8884CC}
+</style>
+
+<div style="padding:16px 0">
+<div class="phone" id="phone">
+  <div class="screen splash" id="s-splash">
+    <div class="status"><span>23:26</span><span>100%</span></div>
+    <div class="sekar-wrap">
+      <svg width="90" height="90" viewBox="-2.5 -2.5 5 5">
+        <path d="M0,0 C-0.5,-0.9 -0.7,-1.9 0,-2.5 C0.7,-1.9 0.5,-0.9 0,0" fill="#8B85FF"/>
+        <path d="M0,0 C-0.5,-0.9 -0.7,-1.9 0,-2.5 C0.7,-1.9 0.5,-0.9 0,0" fill="#6C63FF" transform="rotate(72)"/>
+        <path d="M0,0 C-0.5,-0.9 -0.7,-1.9 0,-2.5 C0.7,-1.9 0.5,-0.9 0,0" fill="#8B85FF" transform="rotate(144)"/>
+        <path d="M0,0 C-0.5,-0.9 -0.7,-1.9 0,-2.5 C0.7,-1.9 0.5,-0.9 0,0" fill="#6C63FF" transform="rotate(216)"/>
+        <path d="M0,0 C-0.5,-0.9 -0.7,-1.9 0,-2.5 C0.7,-1.9 0.5,-0.9 0,0" fill="#8B85FF" transform="rotate(288)"/>
+        <circle cx="0" cy="0" r="0.42" fill="#4A42CC"/>
+        <circle cx="0" cy="0" r="0.17" fill="#E0DEFF"/>
+      </svg>
+    </div>
+    <div class="wordmark">artharum</div>
+    <div class="tagline">harta yang harum</div>
+  </div>
+
+  <div class="screen onboard hidden" id="s-ob1">
+    <div class="status status-dark"><span>23:26</span><span>100%</span></div>
+    <div class="ob-top">
+      <div class="ob-illo">
+        <svg width="80" height="80" viewBox="-2.5 -2.5 5 5">
+          <path d="M0,0 C-0.5,-0.9 -0.7,-1.9 0,-2.5 C0.7,-1.9 0.5,-0.9 0,0" fill="#8B85FF"/>
+          <path d="M0,0 C-0.5,-0.9 -0.7,-1.9 0,-2.5 C0.7,-1.9 0.5,-0.9 0,0" fill="#6C63FF" transform="rotate(72)"/>
+          <path d="M0,0 C-0.5,-0.9 -0.7,-1.9 0,-2.5 C0.7,-1.9 0.5,-0.9 0,0" fill="#8B85FF" transform="rotate(144)"/>
+          <path d="M0,0 C-0.5,-0.9 -0.7,-1.9 0,-2.5 C0.7,-1.9 0.5,-0.9 0,0" fill="#6C63FF" transform="rotate(216)"/>
+          <path d="M0,0 C-0.5,-0.9 -0.7,-1.9 0,-2.5 C0.7,-1.9 0.5,-0.9 0,0" fill="#8B85FF" transform="rotate(288)"/>
+          <circle cx="0" cy="0" r="0.42" fill="#4A42CC"/>
+          <circle cx="0" cy="0" r="0.17" fill="#E0DEFF"/>
+        </svg>
+      </div>
+      <div class="ob-title">Catat Setiap Transaksi</div>
+      <div class="ob-desc">Rekam pemasukan dan pengeluaran harianmu dengan mudah dan cepat</div>
+    </div>
+    <div class="ob-bottom">
+      <div class="dots">
+        <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+      </div>
+      <button class="btn-primary" onclick="goTo(2)">Selanjutnya →</button>
+      <button class="btn-skip" onclick="goTo(4)">Lewati</button>
+    </div>
+  </div>
+
+  <div class="screen onboard hidden" id="s-ob2">
+    <div class="status status-dark"><span>23:26</span><span>100%</span></div>
+    <div class="ob-top">
+      <div class="ob-illo" style="background:#1D9E75">
+        <svg width="72" height="72" viewBox="0 0 72 72">
+          <rect x="10" y="44" width="12" height="18" rx="3" fill="rgba(255,255,255,0.3)"/>
+          <rect x="26" y="30" width="12" height="32" rx="3" fill="rgba(255,255,255,0.5)"/>
+          <rect x="42" y="18" width="12" height="44" rx="3" fill="rgba(255,255,255,0.9)"/>
+          <polyline points="10,38 22,26 38,32 56,14" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="56" cy="14" r="3.5" fill="#fff"/>
+        </svg>
+      </div>
+      <div class="ob-title">Pantau Keuanganmu</div>
+      <div class="ob-desc">Lihat grafik dan statistik pengeluaran untuk memahami pola keuanganmu</div>
+    </div>
+    <div class="ob-bottom">
+      <div class="dots">
+        <div class="dot"></div><div class="dot active"></div><div class="dot"></div>
+      </div>
+      <button class="btn-primary" onclick="goTo(3)">Selanjutnya →</button>
+      <button class="btn-skip" onclick="goTo(4)">Lewati</button>
+    </div>
+  </div>
+
+  <div class="screen onboard hidden" id="s-ob3">
+    <div class="status status-dark"><span>23:26</span><span>100%</span></div>
+    <div class="ob-top">
+      <div class="ob-illo" style="background:#D85A30">
+        <svg width="72" height="72" viewBox="0 0 72 72">
+          <rect x="14" y="22" width="44" height="32" rx="6" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+          <rect x="20" y="30" width="20" height="4" rx="2" fill="rgba(255,255,255,0.8)"/>
+          <rect x="20" y="38" width="13" height="4" rx="2" fill="rgba(255,255,255,0.5)"/>
+          <rect x="42" y="30" width="10" height="12" rx="2" fill="#fff"/>
+          <circle cx="36" cy="52" r="8" fill="#fff"/>
+          <text x="36" y="56" text-anchor="middle" font-size="10" fill="#D85A30" font-weight="bold">Rp</text>
+        </svg>
+      </div>
+      <div class="ob-title">Kelola Budget Harian</div>
+      <div class="ob-desc">Tetapkan batas pengeluaran dan dapatkan notifikasi sebelum melebihi budget</div>
+    </div>
+    <div class="ob-bottom">
+      <div class="dots">
+        <div class="dot"></div><div class="dot"></div><div class="dot active"></div>
+      </div>
+      <button class="btn-primary" onclick="goTo(4)">Mulai Sekarang ✦</button>
+    </div>
+  </div>
+
+  <div class="screen onboard hidden" id="s-ob4">
+    <div class="status status-dark"><span>23:26</span><span>100%</span></div>
+    <div class="ob-top">
+      <div style="margin-bottom:24px">
+        <svg width="80" height="80" viewBox="-2.5 -2.5 5 5">
+          <path d="M0,0 C-0.5,-0.9 -0.7,-1.9 0,-2.5 C0.7,-1.9 0.5,-0.9 0,0" fill="#6C63FF"/>
+          <path d="M0,0 C-0.5,-0.9 -0.7,-1.9 0,-2.5 C0.7,-1.9 0.5,-0.9 0,0" fill="#4A42CC" transform="rotate(72)"/>
+          <path d="M0,0 C-0.5,-0.9 -0.7,-1.9 0,-2.5 C0.7,-1.9 0.5,-0.9 0,0" fill="#6C63FF" transform="rotate(144)"/>
+          <path d="M0,0 C-0.5,-0.9 -0.7,-1.9 0,-2.5 C0.7,-1.9 0.5,-0.9 0,0" fill="#4A42CC" transform="rotate(216)"/>
+          <path d="M0,0 C-0.5,-0.9 -0.7,-1.9 0,-2.5 C0.7,-1.9 0.5,-0.9 0,0" fill="#6C63FF" transform="rotate(288)"/>
+          <circle cx="0" cy="0" r="0.42" fill="#3D35B5"/>
+          <circle cx="0" cy="0" r="0.17" fill="#C4C0FF"/>
+        </svg>
+      </div>
+      <div class="ob-title" style="font-size:22px">Selamat Datang di Artharum!</div>
+      <div class="ob-desc" style="margin-top:12px">Mulai perjalanan finansialmu yang lebih harum hari ini ✦</div>
+    </div>
+    <div class="ob-bottom">
+      <button class="btn-primary" style="margin-bottom:10px" onclick="reset()">Daftar Sekarang</button>
+      <button class="btn-skip">Masuk ke Akun</button>
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center;margin-top:12px;font-size:11px;color:var(--color-text-secondary)">
+  Ketuk tombol untuk navigasi — <span style="color:#6C63FF;cursor:pointer" onclick="reset()">reset</span>
+</div>
+</div>
+
+<script>
+let cur = 'splash';
+function goTo(n){
+  document.getElementById('s-'+cur).classList.add('hidden');
+  const next = n===1?'ob1':n===2?'ob2':n===3?'ob3':'ob4';
+  document.getElementById('s-'+next).classList.remove('hidden');
+  cur = next;
+}
+function reset(){
+  ['s-splash','s-ob1','s-ob2','s-ob3','s-ob4'].forEach(id=>{
+    document.getElementById(id).classList.add('hidden');
+  });
+  document.getElementById('s-splash').classList.remove('hidden');
+  cur = 'splash';
+  setTimeout(()=>goTo(1), 1800);
+}
+setTimeout(()=>goTo(1), 2000);
+</script>

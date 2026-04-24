@@ -46,6 +46,7 @@ fun FinanceApp() {
     val navController = rememberNavController()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = currentBackStackEntry?.destination
+    val currentRoute = currentDestination?.route
 
     val bottomDestinations = remember {
         listOf(
@@ -56,17 +57,27 @@ fun FinanceApp() {
         )
     }
 
-    // Bottom Bar muncul di Dashboard, Transactions, Budgets, dan Statistics
-    val showBottomBar by remember(currentDestination) {
+    val bottomRoutes = remember(bottomDestinations) { bottomDestinations.map { it.route }.toSet() }
+    val fabRoutes = remember {
+        setOf(
+            FinanceDestination.Dashboard.route,
+            FinanceDestination.Transactions.route,
+            FinanceDestination.Budgets.route,
+            FinanceDestination.Statistics.route
+        )
+    }
+
+    // Bottom Bar muncul hanya pada route tab utama.
+    val showBottomBar by remember(currentRoute) {
         derivedStateOf {
-            bottomDestinations.any { it.route == currentDestination?.route }
+            currentRoute != null && currentRoute in bottomRoutes
         }
     }
 
-    // FAB Tambah Transaksi muncul HANYA jika menu utama aktif
-    val showGlobalFab by remember(currentDestination) {
+    // FAB tidak tampil saat splash dan dashboard startup.
+    val showGlobalFab by remember(currentRoute, showBottomBar) {
         derivedStateOf {
-            showBottomBar
+            showBottomBar && currentRoute in fabRoutes
         }
     }
 

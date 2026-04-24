@@ -30,14 +30,15 @@ class ManageCategoriesViewModel(
 
     fun saveCategory(id: Long, name: String, type: TransactionType) {
         viewModelScope.launch {
+            val existingCategory = if (id != 0L) categoryRepository.getCategory(id) else null
             val category = Category(
                 id = id,
                 name = name,
                 type = type,
-                icon = "category", // Default icon string
-                colorHex = "#6C63FF", // Default color (PurpleAccent)
-                parentCategoryId = null,
-                isDefault = false
+                icon = existingCategory?.icon ?: "category",
+                colorHex = existingCategory?.colorHex ?: "#6C63FF",
+                parentCategoryId = existingCategory?.parentCategoryId,
+                isDefault = existingCategory?.isDefault ?: false
             )
             categoryRepository.saveCategory(category)
         }
@@ -45,6 +46,8 @@ class ManageCategoriesViewModel(
 
     fun deleteCategory(categoryId: Long) {
         viewModelScope.launch {
+            val category = categoryRepository.getCategory(categoryId)
+            if (category?.isDefault == true) return@launch
             categoryRepository.deleteCategory(categoryId)
         }
     }

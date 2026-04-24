@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -25,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.catatankeuanganpribadi.domain.model.TransactionDetails
 import com.example.catatankeuanganpribadi.presentation.FinanceViewModelFactory
 import com.example.catatankeuanganpribadi.presentation.components.AnimatedBudgetBar
 import com.example.catatankeuanganpribadi.presentation.components.DonutChart
@@ -50,7 +52,8 @@ fun StatisticsScreen(
             modifier = modifier
         )
     } else {
-        val actualViewModel: StatisticsViewModel = viewModel ?: viewModel(factory = FinanceViewModelFactory.statistics())
+        val actualViewModel: StatisticsViewModel =
+            viewModel ?: viewModel(factory = FinanceViewModelFactory.statistics())
         val uiState by actualViewModel.uiState.collectAsStateWithLifecycle()
 
         StatisticsContent(
@@ -67,28 +70,11 @@ private fun StatisticsContent(
     onUpdatePeriod: (PeriodFilter) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val totalsByCategory = uiState.expenseTransactions
-        .groupBy { it.categoryName ?: "Tanpa Kategori" }
-        .mapValues { (_, items) -> items.sumOf { it.amount } }
-        .toList()
-        .sortedByDescending { it.second }
-
-    val totalExpense = totalsByCategory.sumOf { it.second }.coerceAtLeast(1L)
-
-    val donutSlices = totalsByCategory.mapIndexed { index, (name, amount) ->
-        DonutSlice(
-            label = name,
-            value = amount.toFloat(),
-            color = chartColor(index)
-        )
-    }
-
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // ── Header ──
         item(key = "header") {
             Text(
                 "Statistik",
@@ -97,7 +83,6 @@ private fun StatisticsContent(
             )
         }
 
-        // ── Period ──
         item(key = "period") {
             PeriodFilterRow(
                 selected = uiState.selectedPeriod,
@@ -105,7 +90,6 @@ private fun StatisticsContent(
             )
         }
 
-        // ── Insight Card ──
         uiState.topInsight?.let { insight ->
             item(key = "insight") {
                 Card(
@@ -116,7 +100,7 @@ private fun StatisticsContent(
                     )
                 ) {
                     Text(
-                        text = "💡 $insight",
+                        text = "Insight: $insight",
                         modifier = Modifier.padding(16.dp),
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Medium,
@@ -126,110 +110,147 @@ private fun StatisticsContent(
             }
         }
 
-        // ── Donut Chart + Legend ──
-        if (donutSlices.isEmpty()) {
-            item(key = "empty") {
-                EmptyState(
-                    title = "Belum ada data statistik",
-                    subtitle = "Tambahkan pengeluaran untuk melihat distribusi kategori"
-                )
-            }
-        } else {
-            item(key = "chart") {
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant
-                    )
-                ) {
-                    Column(
-                        modifier = Modifier.padding(20.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        // Donut Chart
-                        DonutChart(
-                            slices = donutSlices,
-                            chartSize = 180.dp,
-                            strokeWidth = 28.dp
-                        )
+        statisticsSectionItems(
+            title = "Pemasukan",
+            transactions = uiState.incomeTransactions,
+            emptySubtitle = "Tambahkan pemasukan untuk melihat distribusi kategori"
+        )
 
-                        Spacer(Modifier.height(8.dp))
-
-                        // Total text in/below chart
-                        Text(
-                            "Total Pengeluaran",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Text(
-                            Formatters.rupiah(totalExpense),
-                            style = MaterialTheme.typography.headlineSmall,
-                            fontWeight = FontWeight.Bold
-                        )
-
-                        Spacer(Modifier.height(20.dp))
-
-                        // Legend
-                        DonutLegend(
-                            slices = donutSlices,
-                            total = totalExpense
-                        )
-                    }
-                }
-            }
-
-            // ── Category Breakdown Bars ──
-            item(key = "breakdown_header") {
-                SectionHeader("Detail per Kategori")
-            }
-
-            itemsIndexed(totalsByCategory, key = { _, pair -> pair.first }) { index, (category, amount) ->
-                val percentage = (amount.toDouble() / totalExpense.toDouble() * 100).roundToInt()
-                val color = chartColor(index)
-
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(14.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant
-                    )
-                ) {
-                    Column(
-                        modifier = Modifier.padding(14.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                category,
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                            Text(
-                                "$percentage%",
-                                style = MaterialTheme.typography.labelLarge,
-                                fontWeight = FontWeight.Bold,
-                                color = color
-                            )
-                        }
-                        Text(
-                            Formatters.rupiah(amount),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        AnimatedBudgetBar(
-                            progress = percentage / 100f,
-                            color = color,
-                            height = 8.dp
-                        )
-                    }
-                }
-            }
-        }
+        statisticsSectionItems(
+            title = "Pengeluaran",
+            transactions = uiState.expenseTransactions,
+            emptySubtitle = "Tambahkan pengeluaran untuk melihat distribusi kategori"
+        )
 
         item { Spacer(Modifier.height(8.dp)) }
+    }
+}
+
+private fun LazyListScope.statisticsSectionItems(
+    title: String,
+    transactions: List<TransactionDetails>,
+    emptySubtitle: String
+) {
+    val totalsByCategory = transactions
+        .groupBy { it.categoryName ?: "Tanpa Kategori" }
+        .mapValues { (_, items) -> items.sumOf { it.amount } }
+        .toList()
+        .sortedByDescending { it.second }
+
+    val totalAmount = totalsByCategory.sumOf { it.second }.coerceAtLeast(1L)
+
+    val donutSlices = totalsByCategory.mapIndexed { index, (name, amount) ->
+        DonutSlice(
+            label = name,
+            value = amount.toFloat(),
+            color = chartColor(index)
+        )
+    }
+
+    item(key = "${title}_header") {
+        SectionHeader(title)
+    }
+
+    if (donutSlices.isEmpty()) {
+        item(key = "${title}_empty") {
+            EmptyState(
+                title = "Belum ada data $title",
+                subtitle = emptySubtitle
+            )
+        }
+        return
+    }
+
+    item(key = "${title}_chart") {
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(20.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceVariant
+            )
+        ) {
+            Column(
+                modifier = Modifier.padding(20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                DonutChart(
+                    slices = donutSlices,
+                    chartSize = 180.dp,
+                    strokeWidth = 28.dp
+                )
+
+                Spacer(Modifier.height(8.dp))
+
+                Text(
+                    "Total $title",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    Formatters.rupiah(totalAmount),
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Spacer(Modifier.height(20.dp))
+
+                DonutLegend(
+                    slices = donutSlices,
+                    total = totalAmount
+                )
+            }
+        }
+    }
+
+    item(key = "${title}_breakdown_header") {
+        SectionHeader("Detail per Kategori $title")
+    }
+
+    itemsIndexed(
+        items = totalsByCategory,
+        key = { _, pair -> "$title-${pair.first}" }
+    ) { index, (category, amount) ->
+        val percentage = (amount.toDouble() / totalAmount.toDouble() * 100).roundToInt()
+        val color = chartColor(index)
+
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(14.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceVariant
+            )
+        ) {
+            Column(
+                modifier = Modifier.padding(14.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        category,
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Text(
+                        "$percentage%",
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = color
+                    )
+                }
+                Text(
+                    Formatters.rupiah(amount),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                AnimatedBudgetBar(
+                    progress = percentage / 100f,
+                    color = color,
+                    height = 8.dp
+                )
+            }
+        }
     }
 }
