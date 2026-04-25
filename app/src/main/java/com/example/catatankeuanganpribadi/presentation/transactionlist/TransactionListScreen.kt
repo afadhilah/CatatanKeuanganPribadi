@@ -24,7 +24,11 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -95,7 +99,6 @@ private fun TransactionListContent(
         contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // ── Header ──
         item(key = "header") {
             Text(
                 "Transaksi",
@@ -104,7 +107,6 @@ private fun TransactionListContent(
             )
         }
 
-        // ── Period Filter ──
         item(key = "period") {
             PeriodFilterRow(
                 selected = uiState.selectedPeriod,
@@ -112,11 +114,21 @@ private fun TransactionListContent(
             )
         }
 
-        // ── Search Bar ──
         item(key = "search") {
+            var localSearchQuery by remember { mutableStateOf(uiState.searchQuery) }
+
+            LaunchedEffect(uiState.searchQuery) {
+                if (localSearchQuery != uiState.searchQuery) {
+                    localSearchQuery = uiState.searchQuery
+                }
+            }
+
             OutlinedTextField(
-                value = uiState.searchQuery,
-                onValueChange = onUpdateSearchQuery,
+                value = localSearchQuery,
+                onValueChange = { newValue ->
+                    localSearchQuery = newValue
+                    onUpdateSearchQuery(newValue)
+                },
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = { Text("Cari catatan, kategori, akun...") },
                 leadingIcon = {
@@ -135,7 +147,6 @@ private fun TransactionListContent(
             )
         }
 
-        // ── Account Chips ──
         item(key = "accounts") {
             LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 items(uiState.accounts, key = { it.id }) { account ->
@@ -157,7 +168,6 @@ private fun TransactionListContent(
             }
         }
 
-        // ── Sort & Category Chips ──
         item(key = "sort_category") {
             LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 item {
@@ -203,7 +213,6 @@ private fun TransactionListContent(
             }
         }
 
-        // ── Grouped Transaction List ──
         if (groupedTransactions.isEmpty()) {
             item(key = "empty") {
                 EmptyState(

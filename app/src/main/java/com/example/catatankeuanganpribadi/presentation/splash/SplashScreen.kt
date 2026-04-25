@@ -1,80 +1,61 @@
 package com.example.catatankeuanganpribadi.presentation.splash
 
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.catatankeuanganpribadi.R
-import kotlinx.coroutines.delay
+
+val BrandPrimary = Color(0xFF3D5CFF)
+val BgGradientLight = Color(0xFFF0F3FF)
+val TextMain = Color(0xFF1A1C1E)
+val TextSub = Color(0xFF64748B)
 
 @Composable
 fun SplashScreen(
     onSplashFinished: () -> Unit
 ) {
+    var startAnimation by remember { mutableStateOf(false) }
+
     val breathingAnimation = rememberInfiniteTransition(label = "splash-breath")
-    val logoScale = breathingAnimation.animateFloat(
-        initialValue = 0.97f,
-        targetValue = 1.03f,
+    val logoScale by breathingAnimation.animateFloat(
+        initialValue = 0.98f,
+        targetValue = 1.02f,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1400, easing = FastOutSlowInEasing),
+            animation = tween(durationMillis = 2000, easing = LinearOutSlowInEasing),
             repeatMode = RepeatMode.Reverse
         ),
         label = "logo-scale"
     )
 
-    val dotsAnimation = breathingAnimation.animateFloat(
-        initialValue = 0f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 900, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "dots-alpha"
-    )
-
     LaunchedEffect(Unit) {
-        delay(2000)
-        onSplashFinished()
+        startAnimation = true
     }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        MaterialTheme.colorScheme.primary.copy(alpha = 0.14f),
-                        MaterialTheme.colorScheme.background,
-                        MaterialTheme.colorScheme.background
-                    )
+                Brush.verticalGradient(
+                    colors = listOf(Color.White, BgGradientLight)
                 )
             ),
         contentAlignment = Alignment.Center
@@ -82,81 +63,113 @@ fun SplashScreen(
         Box(
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(top = 72.dp, end = 24.dp)
-                .size(84.dp)
-                .background(
-                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.10f),
-                    shape = CircleShape
-                )
+                .offset(x = 60.dp, y = (-60).dp)
+                .size(250.dp)
+                .background(BrandPrimary.copy(alpha = 0.1f), CircleShape)
+                .blur(70.dp)
         )
 
         Box(
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .padding(bottom = 120.dp, start = 16.dp)
-                .size(58.dp)
-                .background(
-                    color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.10f),
-                    shape = CircleShape
-                )
+                .offset(x = (-40).dp, y = 40.dp)
+                .size(200.dp)
+                .background(Color(0xFF00CFE8).copy(alpha = 0.08f), CircleShape)
+                .blur(60.dp)
         )
 
         Column(
-            modifier = Modifier.padding(horizontal = 28.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(horizontal = 32.dp)
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.artharum_logo_clean),
-                contentDescription = "Artharum Logo",
-                modifier = Modifier
-                    .size(176.dp)
-                    .scale(logoScale.value)
-            )
-
-            Spacer(Modifier.height(24.dp))
-
-            Text(
-                text = "artharum",
-                color = MaterialTheme.colorScheme.onBackground,
-                fontSize = 38.sp,
-                fontWeight = FontWeight.Normal,
-                letterSpacing = 4.sp,
-                fontFamily = FontFamily.Serif
-            )
-
-            Spacer(Modifier.height(6.dp))
-
-            Text(
-                text = "Personal Finance Manager",
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.62f),
-                style = MaterialTheme.typography.bodySmall,
-                letterSpacing = 0.8.sp
-            )
-
-            Spacer(Modifier.height(22.dp))
-
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                repeat(3) { index ->
-                    Box(
+            AnimatedVisibility(
+                visible = startAnimation,
+                enter = fadeIn(tween(1200)) + scaleIn(tween(1000, easing = EaseOutBack))
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(180.dp)
+                        .scale(logoScale),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.artharum_icon_clean),
+                        contentDescription = "Artharum Logo",
                         modifier = Modifier
-                            .size(if (index == 1) 8.dp else 6.dp)
-                            .background(
-                                color = MaterialTheme.colorScheme.primary.copy(
-                                    alpha = if (index == 1) 0.45f + (dotsAnimation.value * 0.35f) else 0.25f
-                                ),
-                                shape = CircleShape
-                            )
+                            .fillMaxSize()
+                            .clip(CircleShape)
                     )
                 }
             }
 
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(28.dp))
 
+            AnimatedVisibility(
+                visible = startAnimation,
+                enter = fadeIn(tween(800, 400)) + slideInVertically(tween(800, 400)) { 40 }
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "artharum",
+                        color = TextMain,
+                        fontSize = 42.sp,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 2.sp,
+                        fontFamily = FontFamily.Serif,
+                        textAlign = TextAlign.Center
+                    )
+
+                    Spacer(Modifier.height(8.dp))
+
+                    Text(
+                        text = "Your Personal Finance Partner",
+                        color = TextSub,
+                        style = MaterialTheme.typography.bodyMedium,
+                        letterSpacing = 0.5.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(64.dp))
+
+            AnimatedVisibility(
+                visible = startAnimation,
+                enter = fadeIn(tween(800, 1000)) + slideInVertically(tween(800, 1000)) { 20 }
+            ) {
+                Button(
+                    onClick = onSplashFinished,
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .height(56.dp),
+                    shape = RoundedCornerShape(28.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = BrandPrimary
+                    ),
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
+                ) {
+                    Text(
+                        "Mulai Kelola",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.White
+                    )
+                }
+            }
+        }
+
+        AnimatedVisibility(
+            visible = startAnimation,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 32.dp),
+            enter = fadeIn(tween(1000, 1600))
+        ) {
             Text(
-                text = "Copyright Ⓒ 2026 Fadhil Illona - Artharum Team",
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.58f),
-                style = MaterialTheme.typography.labelSmall
+                text = "© 2026 Artharum Team",
+                style = MaterialTheme.typography.labelMedium,
+                color = TextSub.copy(alpha = 0.6f)
             )
         }
     }

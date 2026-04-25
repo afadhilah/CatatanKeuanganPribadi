@@ -48,8 +48,8 @@ import com.example.catatankeuanganpribadi.presentation.util.Formatters
 import kotlin.math.roundToInt
 
 private enum class StatisticsMode(val label: String) {
-    INCOME("Pemasukan"),
-    EXPENSE("Pengeluaran")
+    INCOME("Masuk"),
+    EXPENSE("Keluar")
 }
 
 private data class AggregatedStatistics(

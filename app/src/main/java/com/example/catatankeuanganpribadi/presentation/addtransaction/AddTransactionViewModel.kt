@@ -27,7 +27,7 @@ class AddTransactionViewModel(
         viewModelScope.launch {
             categoryRepository.seedDefaultCategoriesIfNeeded()
             seedDefaultAccountIfNeeded()
-            
+
             // Start observing data after seeding
             launch { observeAccounts() }
             launch { observeCategories() }

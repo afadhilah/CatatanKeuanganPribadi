@@ -60,7 +60,7 @@ fun SettingsScreen(
             item {
                 Spacer(Modifier.height(20.dp))
                 Text(
-                    text = "Copyright Ⓒ 2026 Fadhil Illona - Artharum Team",
+                    text = "© 2026 Artharum Team",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,

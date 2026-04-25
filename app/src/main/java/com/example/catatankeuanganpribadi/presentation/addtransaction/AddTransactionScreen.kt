@@ -131,7 +131,7 @@ private fun AddTransactionContent(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 TransactionTypeChip(
-                    label = "Pemasukan",
+                    label = "Masuk",
                     icon = Icons.Rounded.ArrowDownward,
                     selected = uiState.selectedType == TransactionType.INCOME,
                     color = MintGreen,
@@ -139,7 +139,7 @@ private fun AddTransactionContent(
                     modifier = Modifier.weight(1f)
                 )
                 TransactionTypeChip(
-                    label = "Pengeluaran",
+                    label = "Keluar",
                     icon = Icons.Rounded.ArrowUpward,
                     selected = uiState.selectedType == TransactionType.EXPENSE,
                     color = CoralRed,

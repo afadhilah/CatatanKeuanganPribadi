@@ -153,14 +153,14 @@ fun GradientHeroCard(
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     MiniMetricCard(
-                        label = "Pemasukan",
+                        label = "Masuk",
                         amount = totalIncome,
                         icon = Icons.Rounded.ArrowDownward,
                         accentColor = MintGreen,
                         modifier = Modifier.weight(1f)
                     )
                     MiniMetricCard(
-                        label = "Pengeluaran",
+                        label = "Keluar",
                         amount = totalExpense,
                         icon = Icons.Rounded.ArrowUpward,
                         accentColor = CoralRed,
