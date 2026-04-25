@@ -53,9 +53,6 @@ fun FinanceNavGraph(
             exitTransition = { fadeOut(tween(TRANSITION_DURATION)) }
         ) {
             DashboardScreen(
-                onAddTransaction = { navController.navigate(FinanceDestination.AddTransaction.route) },
-                onOpenBudget = { navController.navigate(FinanceDestination.Budgets.route) },
-                onOpenStatistics = { navController.navigate(FinanceDestination.Statistics.route) },
                 onOpenSettings = { navController.navigate(FinanceDestination.Settings.route) }
             )
         }

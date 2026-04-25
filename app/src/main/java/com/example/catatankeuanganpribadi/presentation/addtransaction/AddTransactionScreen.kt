@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material.icons.automirrored.rounded.CompareArrows
@@ -15,9 +16,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -184,6 +187,34 @@ private fun AddTransactionContent(
 
         // ── Amount Display ──
         item {
+            val amountTextFieldValue by remember(uiState.amountInput) {
+                val digits = uiState.amountInput
+                derivedStateOf {
+                    TextFieldValue(
+                        text = digits,
+                        selection = TextRange(digits.length)
+                    )
+                }
+            }
+
+            val displayText = if (uiState.amountInput.isNotEmpty()) {
+                uiState.amountInput.toLongOrNull()
+                    ?.let { Formatters.rupiah(it) } ?: "Rp0"
+            } else {
+                "Rp0"
+            }
+
+            val amountTextStyle = MaterialTheme.typography.displayMedium.copy(
+                fontSize = 46.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                color = if (uiState.amountInput.isNotEmpty()) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                }
+            )
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -194,33 +225,28 @@ private fun AddTransactionContent(
                     .padding(vertical = 28.dp, horizontal = 20.dp),
                 contentAlignment = Alignment.Center
             ) {
-                TextField(
-                    value = uiState.amountInput.toLongOrNull()
-                        ?.let { Formatters.rupiah(it) }
-                        ?: "Rp0",
-                    onValueChange = { input -> onUpdateAmount(input.filter(Char::isDigit)) },
+                BasicTextField(
+                    value = amountTextFieldValue,
+                    onValueChange = { newValue ->
+                        val digits = newValue.text.filter(Char::isDigit)
+                        onUpdateAmount(digits)
+                    },
                     singleLine = true,
-                    textStyle = MaterialTheme.typography.displayMedium.copy(
-                        fontSize = 52.sp,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center,
-                        color = if (uiState.amountInput.isNotEmpty()) {
-                            MaterialTheme.colorScheme.primary
-                        } else {
-                            MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-                        }
-                    ),
+                    textStyle = amountTextStyle.copy(color = Color.Transparent),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    cursorBrush = SolidColor(Color.Transparent),
                     modifier = Modifier.fillMaxWidth(),
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        disabledContainerColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colorScheme.primary
-                    )
+                    decorationBox = {
+                        Box(
+                            modifier = Modifier.fillMaxWidth(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = displayText,
+                                style = amountTextStyle
+                            )
+                        }
+                    }
                 )
             }
         }
@@ -249,8 +275,9 @@ private fun AddTransactionContent(
             FinanceDropdown(
                 label = "Akun",
                 selectedLabel = uiState.accounts.firstOrNull { it.id == uiState.selectedAccountId }
-                    ?.let { "${it.name} • ${Formatters.rupiah(it.balance)}" }.orEmpty(),
-                options = uiState.accounts.map { it.id to "${it.name} — ${Formatters.rupiah(it.balance)}" },
+                    ?.name.orEmpty(),
+                placeholder = "Pilih akun",
+                options = uiState.accounts.map { it.id to it.name },
                 onOptionSelected = onUpdateAccount
             )
         }
@@ -262,9 +289,10 @@ private fun AddTransactionContent(
                     label = "Transfer Ke",
                     selectedLabel = uiState.accounts
                         .firstOrNull { it.id == uiState.selectedTransferAccountId }?.name.orEmpty(),
+                    placeholder = "Pilih akun tujuan",
                     options = uiState.accounts
                         .filter { it.id != uiState.selectedAccountId }
-                        .map { it.id to "${it.name} — ${Formatters.rupiah(it.balance)}" },
+                        .map { it.id to it.name },
                     onOptionSelected = { onUpdateTransferAccount(it) }
                 )
             }
@@ -274,6 +302,7 @@ private fun AddTransactionContent(
                     label = "Kategori",
                     selectedLabel = uiState.categories
                         .firstOrNull { it.id == uiState.selectedCategoryId }?.name.orEmpty(),
+                    placeholder = "Pilih kategori",
                     options = uiState.categories.map { it.id to it.name },
                     onOptionSelected = { onUpdateCategory(it) }
                 )
@@ -342,7 +371,7 @@ private fun TransactionTypeChip(
 ) {
     Surface(
         onClick = onClick,
-        modifier = modifier.height(48.dp),
+        modifier = modifier.height(52.dp),
         shape = RoundedCornerShape(14.dp),
         color = if (selected) color.copy(alpha = 0.15f) else MaterialTheme.colorScheme.surfaceVariant,
         tonalElevation = 0.dp
@@ -360,7 +389,7 @@ private fun TransactionTypeChip(
             )
             Text(
                 label,
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelMedium,
                 fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
                 color = if (selected) color else MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1
@@ -374,6 +403,7 @@ private fun TransactionTypeChip(
 private fun FinanceDropdown(
     label: String,
     selectedLabel: String,
+    placeholder: String,
     options: List<Pair<Long, String>>,
     onOptionSelected: (Long) -> Unit,
     modifier: Modifier = Modifier
@@ -393,6 +423,7 @@ private fun FinanceDropdown(
             onValueChange = {},
             readOnly = true,
             label = { Text(label) },
+            placeholder = { Text(placeholder) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
             shape = RoundedCornerShape(14.dp),
             colors = OutlinedTextFieldDefaults.colors(

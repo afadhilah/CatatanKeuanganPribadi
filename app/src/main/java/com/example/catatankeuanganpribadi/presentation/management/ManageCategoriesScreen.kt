@@ -107,6 +107,15 @@ fun ManageCategoriesScreen(
                         )
                     }
                 }
+
+                item {
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        text = "Kategori bertanda Default berasal dari sistem dan tidak bisa dihapus.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
         }
     }
@@ -132,13 +141,30 @@ fun CategoryItem(
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
+            if (category.isDefault) {
+                Text(
+                    text = "Default",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(end = 4.dp)
+                )
+            }
             IconButton(onClick = onEdit) {
                 Icon(Icons.Rounded.Edit, contentDescription = "Edit")
             }
-            if (!category.isDefault) {
-                IconButton(onClick = onDelete) {
-                    Icon(Icons.Rounded.Delete, contentDescription = "Hapus", tint = MaterialTheme.colorScheme.error)
-                }
+            IconButton(
+                onClick = onDelete,
+                enabled = !category.isDefault
+            ) {
+                Icon(
+                    Icons.Rounded.Delete,
+                    contentDescription = if (category.isDefault) "Kategori default tidak dapat dihapus" else "Hapus",
+                    tint = if (category.isDefault) {
+                        MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.45f)
+                    } else {
+                        MaterialTheme.colorScheme.error
+                    }
+                )
             }
         }
     }
@@ -150,7 +176,7 @@ fun CategoryDialog(
     onDismiss: () -> Unit,
     onConfirm: (String, TransactionType) -> Unit
 ) {
-    var name by remember { mutableStateOf(category?.name ?: "") }
+    var nameInput by remember(category?.id) { mutableStateOf(category?.name.orEmpty()) }
     var type by remember { mutableStateOf(category?.type ?: TransactionType.EXPENSE) }
 
     AlertDialog(
@@ -159,8 +185,8 @@ fun CategoryDialog(
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 OutlinedTextField(
-                    value = name,
-                    onValueChange = { name = it },
+                    value = nameInput,
+                    onValueChange = { nameInput = it },
                     label = { Text("Nama Kategori") },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
@@ -183,8 +209,8 @@ fun CategoryDialog(
         },
         confirmButton = {
             TextButton(
-                onClick = { onConfirm(name, type) },
-                enabled = name.isNotBlank()
+                onClick = { onConfirm(nameInput.trim(), type) },
+                enabled = nameInput.isNotBlank()
             ) {
                 Text("Simpan")
             }

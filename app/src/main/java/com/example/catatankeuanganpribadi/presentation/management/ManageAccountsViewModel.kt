@@ -10,7 +10,8 @@ import kotlinx.coroutines.launch
 
 data class ManageAccountsUiState(
     val accounts: List<Account> = emptyList(),
-    val isLoading: Boolean = true
+    val isLoading: Boolean = true,
+    val errorMessage: String? = null
 )
 
 class ManageAccountsViewModel(
@@ -28,22 +29,46 @@ class ManageAccountsViewModel(
         }
     }
 
-    fun saveAccount(id: Long, name: String, balance: Long) {
+    fun saveAccount(id: Long, name: String) {
         viewModelScope.launch {
-            val account = Account(
-                id = id,
-                name = name,
-                type = AccountType.CASH, // Default for now
-                balance = balance,
-                createdAt = System.currentTimeMillis()
-            )
-            accountRepository.saveAccount(account)
+            runCatching {
+                val existingAccount = if (id == 0L) null else accountRepository.getAccount(id)
+                val account = if (existingAccount != null) {
+                    existingAccount.copy(name = name)
+                } else {
+                    Account(
+                        id = 0L,
+                        name = name,
+                        type = AccountType.CASH,
+                        balance = 0L,
+                        createdAt = System.currentTimeMillis()
+                    )
+                }
+                accountRepository.saveAccount(account)
+            }.onFailure { throwable ->
+                _uiState.update {
+                    it.copy(errorMessage = throwable.message ?: "Gagal menyimpan akun")
+                }
+            }
         }
     }
 
     fun deleteAccount(accountId: Long) {
         viewModelScope.launch {
-            accountRepository.deleteAccount(accountId)
+            runCatching {
+                accountRepository.deleteAccount(accountId)
+            }.onFailure { throwable ->
+                val fallbackMessage = if (throwable.message.orEmpty().contains("FOREIGN KEY", ignoreCase = true)) {
+                    "Akun tidak bisa dihapus karena masih dipakai oleh transaksi"
+                } else {
+                    throwable.message ?: "Gagal menghapus akun"
+                }
+                _uiState.update { it.copy(errorMessage = fallbackMessage) }
+            }
         }
+    }
+
+    fun consumeErrorMessage() {
+        _uiState.update { it.copy(errorMessage = null) }
     }
 }

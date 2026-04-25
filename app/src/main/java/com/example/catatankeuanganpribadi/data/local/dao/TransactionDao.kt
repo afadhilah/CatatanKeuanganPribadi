@@ -121,6 +121,9 @@ interface TransactionDao {
     @Delete
     suspend fun deleteTransaction(transaction: TransactionEntity)
 
+    @Query("SELECT COUNT(*) FROM transactions WHERE account_id = :accountId OR transfer_account_id = :accountId")
+    suspend fun countTransactionsUsingAccount(accountId: Long): Int
+
     @Query(
         """
         SELECT COALESCE(SUM(amount), 0)

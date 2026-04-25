@@ -29,7 +29,10 @@ class AppContainer(context: Context) {
     private val budgetDao = database.budgetDao()
 
     val accountRepository: AccountRepository by lazy {
-        AccountRepositoryImpl(accountDao)
+        AccountRepositoryImpl(
+            accountDao = accountDao,
+            transactionDao = transactionDao
+        )
     }
 
     val categoryRepository: CategoryRepository by lazy {

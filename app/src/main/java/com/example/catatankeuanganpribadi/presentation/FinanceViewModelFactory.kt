@@ -17,7 +17,7 @@ object FinanceViewModelFactory {
     fun dashboard(): ViewModelProvider.Factory = factory { application ->
         DashboardViewModel(
             observeDashboardSummaryUseCase = application.container.observeDashboardSummaryUseCase,
-            observeRecentTransactionsUseCase = application.container.observeRecentTransactionsUseCase
+            observeTransactionsUseCase = application.container.observeTransactionsUseCase
         )
     }
 

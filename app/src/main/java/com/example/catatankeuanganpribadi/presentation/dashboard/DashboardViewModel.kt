@@ -3,7 +3,7 @@ package com.example.catatankeuanganpribadi.presentation.dashboard
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.catatankeuanganpribadi.domain.usecase.ObserveDashboardSummaryUseCase
-import com.example.catatankeuanganpribadi.domain.usecase.ObserveRecentTransactionsUseCase
+import com.example.catatankeuanganpribadi.domain.usecase.ObserveTransactionsUseCase
 import com.example.catatankeuanganpribadi.presentation.model.PeriodFilter
 import com.example.catatankeuanganpribadi.presentation.util.DateRangeFactory
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,11 +11,12 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 class DashboardViewModel(
     private val observeDashboardSummaryUseCase: ObserveDashboardSummaryUseCase,
-    private val observeRecentTransactionsUseCase: ObserveRecentTransactionsUseCase
+    private val observeTransactionsUseCase: ObserveTransactionsUseCase
 ) : ViewModel() {
 
     private val selectedPeriod = MutableStateFlow(PeriodFilter.MONTH)
@@ -25,7 +26,7 @@ class DashboardViewModel(
             val dateRange = DateRangeFactory.create(period)
             combine(
                 observeDashboardSummaryUseCase(dateRange),
-                observeRecentTransactionsUseCase(5)
+                observeTransactionsUseCase(dateRange).map { it.take(5) }
             ) { summary, recentTransactions ->
                 DashboardUiState(
                     isLoading = false,

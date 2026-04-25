@@ -18,7 +18,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.catatankeuanganpribadi.domain.model.Account
 import com.example.catatankeuanganpribadi.presentation.FinanceViewModelFactory
-import com.example.catatankeuanganpribadi.presentation.util.Formatters
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -27,8 +26,16 @@ fun ManageAccountsScreen(
     viewModel: ManageAccountsViewModel = viewModel(factory = FinanceViewModelFactory.manageAccounts())
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
     var showDialog by remember { mutableStateOf(false) }
     var selectedAccount by remember { mutableStateOf<Account?>(null) }
+    var accountToDelete by remember { mutableStateOf<Account?>(null) }
+
+    LaunchedEffect(uiState.errorMessage) {
+        val message = uiState.errorMessage ?: return@LaunchedEffect
+        snackbarHostState.showSnackbar(message)
+        viewModel.consumeErrorMessage()
+    }
 
     if (showDialog) {
         AccountDialog(
@@ -37,15 +44,39 @@ fun ManageAccountsScreen(
                 showDialog = false
                 selectedAccount = null
             },
-            onConfirm = { name, balance ->
-                viewModel.saveAccount(selectedAccount?.id ?: 0L, name, balance)
+            onConfirm = { name ->
+                viewModel.saveAccount(selectedAccount?.id ?: 0L, name)
                 showDialog = false
                 selectedAccount = null
             }
         )
     }
 
+    accountToDelete?.let { pendingDeleteAccount ->
+        AlertDialog(
+            onDismissRequest = { accountToDelete = null },
+            title = { Text("Hapus akun?") },
+            text = {
+                Text("Akun ${pendingDeleteAccount.name} akan dihapus. Jika akun masih dipakai transaksi, penghapusan akan dibatalkan.")
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    viewModel.deleteAccount(pendingDeleteAccount.id)
+                    accountToDelete = null
+                }) {
+                    Text("Hapus")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { accountToDelete = null }) {
+                    Text("Batal")
+                }
+            }
+        )
+    }
+
     Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = { Text("Kelola Akun", fontWeight = FontWeight.Bold) },
@@ -82,7 +113,7 @@ fun ManageAccountsScreen(
                             selectedAccount = account
                             showDialog = true
                         },
-                        onDelete = { viewModel.deleteAccount(account.id) }
+                        onDelete = { accountToDelete = account }
                     )
                 }
             }
@@ -106,7 +137,6 @@ fun AccountItem(
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(account.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                Text(Formatters.rupiah(account.balance), color = MaterialTheme.colorScheme.primary)
             }
             IconButton(onClick = onEdit) {
                 Icon(Icons.Rounded.Edit, contentDescription = "Edit")
@@ -122,10 +152,9 @@ fun AccountItem(
 fun AccountDialog(
     account: Account?,
     onDismiss: () -> Unit,
-    onConfirm: (String, Long) -> Unit
+    onConfirm: (String) -> Unit
 ) {
-    var name by remember { mutableStateOf(account?.name ?: "") }
-    var balance by remember { mutableStateOf(account?.balance?.toString() ?: "") }
+    var nameInput by remember(account?.id) { mutableStateOf(account?.name.orEmpty()) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -133,16 +162,9 @@ fun AccountDialog(
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 OutlinedTextField(
-                    value = name,
-                    onValueChange = { name = it },
+                    value = nameInput,
+                    onValueChange = { nameInput = it },
                     label = { Text("Nama Akun") },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                OutlinedTextField(
-                    value = balance,
-                    onValueChange = { balance = it.filter { char -> char.isDigit() } },
-                    label = { Text("Saldo Awal") },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -150,8 +172,8 @@ fun AccountDialog(
         },
         confirmButton = {
             TextButton(
-                onClick = { onConfirm(name, balance.toLongOrNull() ?: 0L) },
-                enabled = name.isNotBlank()
+                onClick = { onConfirm(nameInput.trim()) },
+                enabled = nameInput.isNotBlank()
             ) {
                 Text("Simpan")
             }

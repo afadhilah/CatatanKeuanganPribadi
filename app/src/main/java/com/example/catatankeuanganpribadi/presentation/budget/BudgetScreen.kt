@@ -45,9 +45,7 @@ import com.example.catatankeuanganpribadi.domain.model.BudgetStatus
 import com.example.catatankeuanganpribadi.presentation.FinanceViewModelFactory
 import com.example.catatankeuanganpribadi.presentation.components.AnimatedBudgetBar
 import com.example.catatankeuanganpribadi.presentation.components.EmptyState
-import com.example.catatankeuanganpribadi.presentation.components.PeriodFilterRow
 import com.example.catatankeuanganpribadi.presentation.components.SectionHeader
-import com.example.catatankeuanganpribadi.presentation.model.PeriodFilter
 import com.example.catatankeuanganpribadi.presentation.util.Formatters
 import com.example.catatankeuanganpribadi.ui.theme.AmberYellow
 import com.example.catatankeuanganpribadi.ui.theme.CoralRed
@@ -61,7 +59,6 @@ fun BudgetScreen(
     if (LocalInspectionMode.current && viewModel == null) {
         BudgetContent(
             uiState = BudgetUiState(),
-            onUpdatePeriod = {},
             onUpdateCategory = {},
             onUpdateLimitAmount = {},
             onSaveBudget = {},
@@ -73,7 +70,6 @@ fun BudgetScreen(
 
         BudgetContent(
             uiState = uiState,
-            onUpdatePeriod = actualViewModel::updatePeriod,
             onUpdateCategory = actualViewModel::updateCategory,
             onUpdateLimitAmount = actualViewModel::updateLimitAmount,
             onSaveBudget = actualViewModel::saveBudget,
@@ -86,7 +82,6 @@ fun BudgetScreen(
 @Composable
 private fun BudgetContent(
     uiState: BudgetUiState,
-    onUpdatePeriod: (PeriodFilter) -> Unit,
     onUpdateCategory: (Long) -> Unit,
     onUpdateLimitAmount: (String) -> Unit,
     onSaveBudget: () -> Unit,
@@ -103,14 +98,6 @@ private fun BudgetContent(
                 "Budget",
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Bold
-            )
-        }
-
-        // ── Period ──
-        item(key = "period") {
-            PeriodFilterRow(
-                selected = uiState.selectedPeriod,
-                onSelected = onUpdatePeriod
             )
         }
 

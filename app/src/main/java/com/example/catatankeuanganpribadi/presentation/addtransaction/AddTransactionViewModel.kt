@@ -18,6 +18,8 @@ class AddTransactionViewModel(
     private val saveTransactionUseCase: SaveTransactionUseCase
 ) : ViewModel() {
 
+    private val isEditMode: Boolean = transactionId != -1L
+
     private val _uiState = MutableStateFlow(AddTransactionUiState())
     val uiState: StateFlow<AddTransactionUiState> = _uiState.asStateFlow()
 
@@ -55,9 +57,24 @@ class AddTransactionViewModel(
     private suspend fun observeAccounts() {
         accountRepository.observeAccounts().collect { accounts ->
             _uiState.update { state ->
+                val validatedSelectedAccountId = state.selectedAccountId
+                    ?.takeIf { selectedId -> accounts.any { it.id == selectedId } }
+                val fallbackAccountId = if (isEditMode) accounts.firstOrNull()?.id else null
+                val nextSelectedAccountId = validatedSelectedAccountId ?: fallbackAccountId
+
+                val validatedTransferAccountId = state.selectedTransferAccountId
+                    ?.takeIf { transferId ->
+                        accounts.any { it.id == transferId } && transferId != nextSelectedAccountId
+                    }
+
                 state.copy(
                     accounts = accounts,
-                    selectedAccountId = state.selectedAccountId ?: accounts.firstOrNull()?.id,
+                    selectedAccountId = nextSelectedAccountId,
+                    selectedTransferAccountId = if (state.selectedType == TransactionType.TRANSFER) {
+                        validatedTransferAccountId
+                    } else {
+                        null
+                    },
                     isLoading = false
                 )
             }
@@ -72,12 +89,19 @@ class AddTransactionViewModel(
             }
             .collect { categories ->
                 _uiState.update { state ->
+                    val validatedSelectedCategoryId = state.selectedCategoryId
+                        ?.takeIf { selectedId -> categories.any { it.id == selectedId } }
+
                     state.copy(
                         categories = categories,
                         selectedCategoryId = if (state.selectedType == TransactionType.TRANSFER) {
                             null
                         } else {
-                            state.selectedCategoryId ?: categories.firstOrNull()?.id
+                            validatedSelectedCategoryId ?: if (isEditMode) {
+                                categories.firstOrNull()?.id
+                            } else {
+                                null
+                            }
                         }
                     )
                 }

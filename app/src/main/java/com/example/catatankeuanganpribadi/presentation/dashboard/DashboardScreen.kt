@@ -21,13 +21,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.catatankeuanganpribadi.presentation.FinanceViewModelFactory
 import com.example.catatankeuanganpribadi.presentation.components.*
-import com.example.catatankeuanganpribadi.presentation.model.PeriodFilter
 
 @Composable
 fun DashboardScreen(
-    onAddTransaction: () -> Unit,
-    onOpenBudget: () -> Unit,
-    onOpenStatistics: () -> Unit,
     onOpenSettings: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: DashboardViewModel? = null
@@ -35,10 +31,6 @@ fun DashboardScreen(
     if (LocalInspectionMode.current && viewModel == null) {
         DashboardContent(
             uiState = DashboardUiState(isLoading = false),
-            onUpdatePeriod = {},
-            onAddTransaction = onAddTransaction,
-            onOpenBudget = onOpenBudget,
-            onOpenStatistics = onOpenStatistics,
             onOpenSettings = onOpenSettings,
             modifier = modifier
         )
@@ -48,10 +40,6 @@ fun DashboardScreen(
 
         DashboardContent(
             uiState = uiState,
-            onUpdatePeriod = actualViewModel::updatePeriod,
-            onAddTransaction = onAddTransaction,
-            onOpenBudget = onOpenBudget,
-            onOpenStatistics = onOpenStatistics,
             onOpenSettings = onOpenSettings,
             modifier = modifier
         )
@@ -61,10 +49,6 @@ fun DashboardScreen(
 @Composable
 private fun DashboardContent(
     uiState: DashboardUiState,
-    onUpdatePeriod: (PeriodFilter) -> Unit,
-    onAddTransaction: () -> Unit,
-    onOpenBudget: () -> Unit,
-    onOpenStatistics: () -> Unit,
     onOpenSettings: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -104,14 +88,6 @@ private fun DashboardContent(
             }
         }
 
-        // ── Period Filter ──
-        item(key = "period") {
-            PeriodFilterRow(
-                selected = uiState.selectedPeriod,
-                onSelected = onUpdatePeriod
-            )
-        }
-
         // ── Hero Balance Card ──
         item(key = "hero") {
             AnimatedContent(
@@ -124,18 +100,6 @@ private fun DashboardContent(
                     totalIncome = summary.totalIncome,
                     totalExpense = summary.totalExpense
                 )
-            }
-        }
-
-        // ── Quick Actions ──
-        item(key = "quick_actions") {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                ShortcutChip(label = "＋ Tambah", onClick = onAddTransaction)
-                ShortcutChip(label = "💰 Budget", onClick = onOpenBudget)
-                ShortcutChip(label = "📊 Statistik", onClick = onOpenStatistics)
             }
         }
 

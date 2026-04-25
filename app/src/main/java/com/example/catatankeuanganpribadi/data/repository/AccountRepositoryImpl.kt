@@ -1,6 +1,7 @@
 package com.example.catatankeuanganpribadi.data.repository
 
 import com.example.catatankeuanganpribadi.data.local.dao.AccountDao
+import com.example.catatankeuanganpribadi.data.local.dao.TransactionDao
 import com.example.catatankeuanganpribadi.data.mapper.toDomain
 import com.example.catatankeuanganpribadi.data.mapper.toEntity
 import com.example.catatankeuanganpribadi.domain.model.Account
@@ -9,7 +10,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class AccountRepositoryImpl(
-    private val accountDao: AccountDao
+    private val accountDao: AccountDao,
+    private val transactionDao: TransactionDao
 ) : AccountRepository {
 
     override fun observeAccounts(): Flow<List<Account>> {
@@ -27,6 +29,11 @@ class AccountRepositoryImpl(
     }
 
     override suspend fun deleteAccount(accountId: Long) {
+        val usageCount = transactionDao.countTransactionsUsingAccount(accountId)
+        require(usageCount == 0) {
+            "Akun tidak bisa dihapus karena masih dipakai oleh transaksi"
+        }
+
         accountDao.getAccountById(accountId)?.let { account ->
             accountDao.deleteAccount(account)
         }
