@@ -82,8 +82,8 @@ on:
    ```
 
 #### Outputs:
-- 📦 **APK**: `app-release.apk` (untuk manual install)
-- 📦 **AAB**: `app-release.aab` (untuk Google Play Store)
+- **APK**: `app-release.apk` (untuk manual install)
+- **AAB**: `app-release.aab` (untuk Google Play Store)
 - **Release Notes**: Auto-generated dari commits
 
 ---
@@ -327,7 +327,7 @@ Build took too long
 
 ---
 
-## 🔄 Best Practices
+## Best Practices
 
 ### 1. **Semantic Versioning**
 ```bash
@@ -366,14 +366,14 @@ Commits digunakan untuk auto-generate release notes.
 ## Release Notes Template
 
 Auto-generated release notes akan include:
-- 🎉 **Features** - Fitur baru
-- 🐛 **Bug Fixes** - Bug yang di-fix
+- **Features** - Fitur baru
+- **Bug Fixes** - Bug yang di-fix
 - **Documentation** - Doc changes
-- 🔄 **Chores** - Maintenance tasks
+- **Chores** - Maintenance tasks
 
 ---
 
-## 🔗 Resources
+## Resources
 
 - [GitHub Actions Docs](https://docs.github.com/actions)
 - [Android GitHub Actions](https://github.com/android-actions)
@@ -383,7 +383,7 @@ Auto-generated release notes akan include:
 
 ## 📞 Support
 
-- 🐛 Report workflow issues: [GitHub Issues](../../issues)
+- Report workflow issues: [GitHub Issues](../../issues)
 - 💬 Discussion: [GitHub Discussions](../../discussions)
 
 ---

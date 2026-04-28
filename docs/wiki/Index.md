@@ -54,10 +54,10 @@ Mulai dari sini jika Anda ingin mengembangkan aplikasi:
 
 ---
 
-### 🚀 **Untuk DevOps / Release**
+### **Untuk DevOps / Release**
 Mulai dari sini untuk build & deployment:
 
-1. **[GitHub Actions](GitHub-Actions.md)** ⭐ START HERE
+1. **[GitHub Actions](GitHub-Actions.md)** START HERE
    - Workflows explanation
    - Auto-build pipeline
    - Release management
@@ -302,22 +302,22 @@ GitHub-Actions.md
 
 ---
 
-## 💡 Tips
+## Tips
 
 - 📌 Bookmark frequently used pages
-- 🔍 Use Ctrl+F untuk search dalam halaman
-- 🔗 Click links untuk navigate antar pages
+- Use Ctrl+F untuk search dalam halaman
+- Click links untuk navigate antar pages
 - 💬 Ask questions di GitHub Discussions
-- 🐛 Report issues di GitHub Issues
+- Report issues di GitHub Issues
 
 ---
 
-## 🔄 Wiki Updates
+## Wiki Updates
 
 Wiki di-update regularly dengan:
 - Documentation improvements
 - New guides & tutorials
-- 🐛 Troubleshooting additions
+- Troubleshooting additions
 - Updated examples
 
 **Last Updated**: April 29, 2026
@@ -328,8 +328,8 @@ Wiki di-update regularly dengan:
 
 Tidak menemukan jawaban?
 - 💬 Ask di [GitHub Discussions](../../discussions)
-- 🐛 Report issue di [GitHub Issues](../../issues)
-- 📧 Email: support@catatankeuangan.com
+- Report issue di [GitHub Issues](../../issues)
+- Email: support@catatankeuangan.com
 
 ---
 

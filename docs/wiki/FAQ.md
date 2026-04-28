@@ -388,9 +388,9 @@ Output akan ada di `app/build/outputs/`
 ### Q: Bagaimana cara contact developer?
 
 **A:**
-- 📧 Email: [support@catatankeuangan.com]
+- Email: [support@catatankeuangan.com]
 - 💬 GitHub Discussions: [Link](../../discussions)
-- 🐛 Issue Tracker: [Link](../../issues)
+- Issue Tracker: [Link](../../issues)
 
 ---
 

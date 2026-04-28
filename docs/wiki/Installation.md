@@ -252,7 +252,7 @@ adb install app/build/outputs/apk/release/app-release.apk
 
 ---
 
-## 💡 Tips & Tricks
+## Tips & Tricks
 
 ### 1. **Kategori Custom**
    - Anda bisa menambah kategori custom di Settings
@@ -276,7 +276,7 @@ adb install app/build/outputs/apk/release/app-release.apk
 
 ---
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### App Force Close
 **Solution:**
@@ -306,14 +306,14 @@ adb install app/build/outputs/apk/release/app-release.apk
 
 ## 📞 Bantuan & Support
 
-- 📧 Email: [support@catatankeuangan.com]
-- 🐛 Report Issues: https://github.com/afadh/CatatanKeuanganPribadi/issues
+- Email: [support@catatankeuangan.com]
+- Report Issues: https://github.com/afadh/CatatanKeuanganPribadi/issues
 - 💬 Discussion: https://github.com/afadh/CatatanKeuanganPribadi/discussions
 - Feedback: In-app feedback form
 
 ---
 
-## 🎓 Video Tutorials
+## Video Tutorials
 
 Kunjungi YouTube channel kami untuk tutorial lengkap:
 - Setup awal

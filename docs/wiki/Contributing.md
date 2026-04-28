@@ -58,7 +58,7 @@ Apa yang benar-benar terjadi?
 
 ---
 
-## ✨ Suggesting Features
+## Suggesting Features
 
 ### Sebelum Suggest:
 1. Check existing features di [Features](Features.md)
@@ -293,7 +293,7 @@ class Transaction(
 
 ---
 
-## 🧪 Testing
+## Testing
 
 ### Unit Tests
 
@@ -400,16 +400,16 @@ fun example() { }
 
 ---
 
-## 🔄 Roadmap
+## Roadmap
 
 ### v1.0 ✅ (Current)
 - ✅ Core features (transaction, account, budget)
 - ✅ Dashboard & statistics
 - ✅ Local database
 
-### v1.1 🔄 (In Progress)
-- 🔄 Cloud sync
-- 🔄 Advanced export
+### v1.1 (In Progress)
+- Cloud sync
+- Advanced export
 
 ### v2.0 📋 (Planned)
 - 📋 AI-powered expense prediction
@@ -419,7 +419,7 @@ fun example() { }
 
 ---
 
-## 🎓 Resources
+## Resources
 
 - [Android Developer Guide](https://developer.android.com/)
 - [Kotlin Documentation](https://kotlinlang.org/docs/)
@@ -431,8 +431,8 @@ fun example() { }
 ## 📞 Need Help?
 
 - 💬 [GitHub Discussions](../../discussions)
-- 🐛 [Issues](../../issues)
-- 📧 Email: support@catatankeuangan.com
+- [Issues](../../issues)
+- Email: support@catatankeuangan.com
 
 ---
 
