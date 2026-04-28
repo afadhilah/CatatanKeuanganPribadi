@@ -1,4 +1,4 @@
-# CatatanKeuanganPribadi - Personal Finance Tracker
+# Artharum
 
 Aplikasi Android untuk mencatat dan mengelola keuangan pribadi dengan fitur transaksi, budget, dan statistik.
 
