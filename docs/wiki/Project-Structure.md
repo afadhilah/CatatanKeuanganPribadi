@@ -260,7 +260,7 @@ kotlin-android = "2.0.21"
 
 ---
 
-## 🔷 .github/ - GitHub Configuration
+## .github/ - GitHub Configuration
 
 ```
 .github/
@@ -291,7 +291,7 @@ docs/
 
 ---
 
-## 📄 Key Configuration Files
+## Key Configuration Files
 
 ### build.gradle.kts (Root)
 - Gradle plugins
@@ -325,7 +325,7 @@ docs/
 
 ---
 
-## 🏗️ Typical Data Flow
+## Typical Data Flow
 
 ```
 MainActivity
@@ -419,10 +419,8 @@ app (main application)
 
 ## Related Docs
 
-- [Architecture](Architecture.md)
-- [Development Setup](Development-Setup.md)
-- [Contributing](Contributing.md)
+- [Architecture](Architecture)
+- [Development Setup](Development-Setup)
+- [Contributing](Contributing)
 
 ---
-
-**Last Updated**: April 29, 2026

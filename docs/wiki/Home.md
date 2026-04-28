@@ -1,6 +1,6 @@
-# CatatanKeuanganPribadi Wiki
+# Artharum Wiki
 
-Selamat datang di Wiki resmi **CatatanKeuanganPribadi** - Aplikasi Android untuk mencatat dan mengelola keuangan pribadi.
+Selamat datang di Wiki resmi **Artharum** - Aplikasi Android untuk mencatat dan mengelola keuangan pribadi.
 
 ## Tujuan Aplikasi
 
@@ -16,27 +16,27 @@ Aplikasi ini dirancang untuk membantu Anda:
 ## Dokumentasi Utama
 
 ### Panduan Pengguna
-- **[Installation](Installation.md)** - Cara install dan setup aplikasi
-- **[Features](Features.md)** - Penjelasan fitur-fitur aplikasi
-- **[User Guide](User-Guide.md)** - Tutorial penggunaan lengkap
-- **[FAQ](FAQ.md)** - Pertanyaan yang sering diajukan
+- **[Installation](Installation)** - Cara install dan setup aplikasi
+- **[Features](Features)** - Penjelasan fitur-fitur aplikasi
+- **[User Guide](User-Guide)** - Tutorial penggunaan lengkap
+- **[FAQ](FAQ)** - Pertanyaan yang sering diajukan
 
 ### Panduan Developer
-- **[Architecture](Architecture.md)** - Arsitektur aplikasi (Clean Architecture + MVVM)
-- **[Project Structure](Project-Structure.md)** - Struktur folder project
-- **[Development Setup](Development-Setup.md)** - Setup environment development
-- **[API Integration](API-Integration.md)** - Integrasi API (jika ada)
-- **[Testing](Testing.md)** - Cara run unit tests dan instrumented tests
+- **[Architecture](Architecture)** - Arsitektur aplikasi (Clean Architecture + MVVM)
+- **[Project Structure](Project-Structure)** - Struktur folder project
+- **[Development Setup](Development-Setup)** - Setup environment development
+- **[API Integration](API-Integration)** - Integrasi API (jika ada)
+- **[Testing](Testing)** - Cara run unit tests dan instrumented tests
 
 ### DevOps & Deployment
-- **[GitHub Actions](GitHub-Actions.md)** - CI/CD Pipeline
-- **[Build & Release](Build-Release.md)** - Cara build dan release aplikasi
-- **[Troubleshooting](Troubleshooting.md)** - Pemecahan masalah umum
+- **[GitHub Actions](GitHub-Actions)** - CI/CD Pipeline
+- **[Build & Release](Build-Release)** - Cara build dan release aplikasi
+- **[Troubleshooting](Troubleshooting)** - Pemecahan masalah umum
 
 ### Kontribusi
-- **[Contributing](Contributing.md)** - Panduan kontribusi ke project
-- **[Code Style](Code-Style.md)** - Panduan style code Kotlin
-- **[Git Workflow](Git-Workflow.md)** - Workflow git yang digunakan
+- **[Contributing](Contributing)** - Panduan kontribusi ke project
+- **[Code Style](Code-Style)** - Panduan style code Kotlin
+- **[Git Workflow](Git-Workflow)** - Workflow git yang digunakan
 
 ---
 
@@ -90,10 +90,5 @@ cd CatatanKeuanganPribadi
 ## Support
 
 - Email: [afadhilah2004@gmail.com]
-- Issues: Report di [GitHub Issues](../../issues)
-- Discussions: Join [GitHub Discussions](../../discussions)
-
----
-
-**Last Updated**: April 29, 2026  
-**Version**: 1.0.0
+- Issues: Report di [GitHub Issues](../issues)
+- Discussions: Join [GitHub Discussions](../discussions)

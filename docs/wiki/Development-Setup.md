@@ -384,5 +384,3 @@ adb devices
 - [Android Studio Documentation](https://developer.android.com/studio/intro)
 
 ---
-
-**Last Updated**: April 29, 2026

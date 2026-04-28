@@ -381,12 +381,7 @@ Auto-generated release notes akan include:
 
 ---
 
-## 📞 Support
+## Support
 
 - Report workflow issues: [GitHub Issues](../../issues)
-- 💬 Discussion: [GitHub Discussions](../../discussions)
-
----
-
-**Last Updated**: April 29, 2026  
-**Workflow Version**: 2.0
+- Discussion: [GitHub Discussions](../../discussions)

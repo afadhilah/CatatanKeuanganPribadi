@@ -1,6 +1,6 @@
 # Contributing Guide
 
-Terima kasih atas minat untuk berkontribusi ke CatatanKeuanganPribadi! Panduan ini akan membantu Anda.
+Terima kasih atas minat untuk berkontribusi ke Artharum! Panduan ini akan membantu Anda.
 
 ---
 
@@ -402,20 +402,20 @@ fun example() { }
 
 ## Roadmap
 
-### v1.0 ✅ (Current)
-- ✅ Core features (transaction, account, budget)
-- ✅ Dashboard & statistics
-- ✅ Local database
+### v1.0 (Current)
+- Core features (transaction, account, budget)
+- Dashboard & statistics
+- Local database
 
 ### v1.1 (In Progress)
 - Cloud sync
 - Advanced export
 
-### v2.0 📋 (Planned)
-- 📋 AI-powered expense prediction
-- 📋 Multi-user support
-- 📋 Web dashboard
-- 📋 Mobile app for other platforms
+### v2.0 (Planned)
+- AI-powered expense prediction
+- Multi-user support
+- Web dashboard
+- Mobile app for other platforms
 
 ---
 
@@ -428,18 +428,14 @@ fun example() { }
 
 ---
 
-## 📞 Need Help?
+## Need Help?
 
-- 💬 [GitHub Discussions](../../discussions)
+- [GitHub Discussions](../../discussions)
 - [Issues](../../issues)
-- Email: support@catatankeuangan.com
+- Email: afadhilah2004@gmail.com
 
 ---
 
-## 🙏 Thank You!
+## Thank You!
 
-Terima kasih telah berkontribusi untuk membuat CatatanKeuanganPribadi lebih baik!
-
----
-
-**Last Updated**: April 29, 2026
+Terima kasih telah berkontribusi untuk membuat Artharum lebih baik!

@@ -1,30 +1,30 @@
-# 📚 CatatanKeuanganPribadi Wiki
+# Artharum
 
-Selamat datang di dokumentasi lengkap **CatatanKeuanganPribadi**.
+Selamat datang di dokumentasi lengkap **Artharum**.
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
-### 👤 Untuk Pengguna Aplikasi
+### Untuk Pengguna Aplikasi
 Ingin menggunakan aplikasi? Mulai dari sini:
 - **[Installation & User Guide](wiki/Installation.md)** - Download, install, dan tutorial lengkap
 - **[Features](wiki/Features.md)** - Penjelasan semua fitur
 - **[FAQ](wiki/FAQ.md)** - Jawaban atas pertanyaan umum
 
-### 💻 Untuk Developer
+### Untuk Developer
 Ingin berkontribusi atau develop? Mulai dari sini:
 - **[Development Setup](wiki/Development-Setup.md)** - Setup environment
 - **[Architecture](wiki/Architecture.md)** - System design
 - **[Contributing](wiki/Contributing.md)** - Cara kontribusi
 
-### 🚀 Untuk DevOps / Release Manager
+### Untuk DevOps / Release Manager
 Ingin deploy atau release? Mulai dari sini:
 - **[GitHub Actions](wiki/GitHub-Actions.md)** - CI/CD pipeline
 
 ---
 
-## 📖 Daftar Lengkap
+## Daftar Lengkap
 
 | File | Deskripsi |
 |------|-----------|
@@ -41,7 +41,7 @@ Ingin deploy atau release? Mulai dari sini:
 
 ---
 
-## 🎯 Cara Menggunakan Wiki
+## Cara Menggunakan Wiki
 
 ### Method 1: Baca di GitHub
 1. Buka repository di GitHub
@@ -59,7 +59,7 @@ Ingin deploy atau release? Mulai dari sini:
 
 ---
 
-## 📊 Wiki Statistics
+## Wiki Statistics
 
 - **Total Pages**: 10+
 - **Total Sections**: 50+
@@ -69,7 +69,7 @@ Ingin deploy atau release? Mulai dari sini:
 
 ---
 
-## 🎓 Learning Paths
+## Learning Paths
 
 ### Path 1: User Onboarding
 Untuk pengguna baru aplikasi:
@@ -100,18 +100,18 @@ FAQ.md
 
 ---
 
-## 💡 Features
+## Features
 
-✅ **Comprehensive** - Dokumentasi lengkap untuk semua aspek  
-✅ **Well-Organized** - Easy navigation dengan clear structure  
-✅ **Up-to-Date** - Regular updates dengan latest info  
-✅ **Examples** - Code examples dan usage tutorials  
-✅ **Searchable** - Easy to find what you need  
-✅ **Beginner-Friendly** - Clear explanations untuk semua level  
+**Comprehensive** - Dokumentasi lengkap untuk semua aspek  
+**Well-Organized** - Easy navigation dengan clear structure  
+**Up-to-Date** - Regular updates dengan latest info  
+**Examples** - Code examples dan usage tutorials  
+**Searchable** - Easy to find what you need  
+**Beginner-Friendly** - Clear explanations untuk semua level  
 
 ---
 
-## 🔗 Related Resources
+## Related Resources
 
 - **GitHub Repository**: https://github.com/afadh/CatatanKeuanganPribadi
 - **Issues**: https://github.com/afadh/CatatanKeuanganPribadi/issues
@@ -120,15 +120,15 @@ FAQ.md
 
 ---
 
-## 📞 Need Help?
+## Need Help?
 
-- 💬 **Ask Questions**: [GitHub Discussions](https://github.com/afadh/CatatanKeuanganPribadi/discussions)
-- 🐛 **Report Issues**: [GitHub Issues](https://github.com/afadh/CatatanKeuanganPribadi/issues)
-- 📧 **Email Support**: support@catatankeuangan.com
+- **Ask Questions**: [GitHub Discussions](https://github.com/afadh/CatatanKeuanganPribadi/discussions)
+- **Report Issues**: [GitHub Issues](https://github.com/afadh/CatatanKeuanganPribadi/issues)
+- **Email Support**: support@catatankeuangan.com
 
 ---
 
-## 📝 Contributing to Wiki
+## Contributing to Wiki
 
 Ingin improve wiki?
 - Fix typos atau grammar
@@ -140,16 +140,10 @@ Lihat [Contributing.md](wiki/Contributing.md) untuk details.
 
 ---
 
-## 📄 License
-
-Documentation berlisensi di bawah [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/)
-
----
-
 **Last Updated**: April 29, 2026  
 **Version**: 1.0.0  
-**Status**: ✅ Production Ready
+**Status**: Production Ready
 
 ---
 
-**Happy Reading! 📚**
+**Happy Reading!**

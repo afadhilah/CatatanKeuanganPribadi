@@ -12,7 +12,7 @@
 3. Buat akun pertama dengan nominal awal
 4. Mulai catat transaksi dari dashboard
 
-Detail: [Installation Guide](Installation.md)
+Detail: [Installation Guide](Installation)
 
 ---
 
@@ -279,7 +279,7 @@ Ya, di setiap release:
 - Target Android: Android 16 (API 36)
 - Tested dengan berbagai Android versions
 
-Check [Development Setup](Development-Setup.md) untuk requirement detail.
+Check [Development Setup](Development-Setup) untuk requirement detail.
 
 ---
 
@@ -294,7 +294,7 @@ Check [Development Setup](Development-Setup.md) untuk requirement detail.
 4. Push: `git push origin feature/your-feature`
 5. Create Pull Request
 
-Detail: [Contributing Guide](Contributing.md)
+Detail: [Contributing Guide](Contributing)
 
 ---
 
@@ -307,7 +307,7 @@ Project menggunakan:
 - **Room Database** - Local storage
 - **Jetpack Compose** - UI Framework
 
-Detail: [Architecture](Architecture.md)
+Detail: [Architecture](Architecture)
 
 ---
 
@@ -319,7 +319,7 @@ Detail: [Architecture](Architecture.md)
 3. Create `local.properties` dengan Android SDK path
 4. Run `./gradlew build`
 
-Detail: [Development Setup](Development-Setup.md)
+Detail: [Development Setup](Development-Setup)
 
 ---
 
@@ -357,7 +357,7 @@ Output akan ada di `app/build/outputs/`
 
 ---
 
-## 📞 Support & Feedback
+## Support & Feedback
 
 ### Q: Bagaimana cara report bug?
 
@@ -388,24 +388,20 @@ Output akan ada di `app/build/outputs/`
 ### Q: Bagaimana cara contact developer?
 
 **A:**
-- Email: [support@catatankeuangan.com]
-- 💬 GitHub Discussions: [Link](../../discussions)
+- Email: [afadhilah2004@gmail.com](mailto:afadhilah2004@gmail.com)
+- GitHub Discussions: [Link](../../discussions)
 - Issue Tracker: [Link](../../issues)
 
 ---
 
 ## Additional Resources
 
-- [Installation & User Guide](Installation.md)
-- [Features Detail](Features.md)
-- [Architecture Guide](Architecture.md)
-- [Development Setup](Development-Setup.md)
-- [Contributing Guide](Contributing.md)
-- [GitHub Actions Guide](GitHub-Actions.md)
-
----
-
-**Last Updated**: April 29, 2026
+- [Installation & User Guide](Installation)
+- [Features Detail](Features)
+- [Architecture Guide](Architecture)
+- [Development Setup](Development-Setup)
+- [Contributing Guide](Contributing)
+- [GitHub Actions Guide](GitHub-Actions)
 
 ---
 

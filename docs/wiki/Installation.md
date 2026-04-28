@@ -1,6 +1,6 @@
 # Instalasi & User Guide
 
-Panduan lengkap untuk install dan menggunakan CatatanKeuanganPribadi.
+Panduan lengkap untuk install dan menggunakan Artharum.
 
 ---
 
@@ -50,7 +50,7 @@ adb install app/build/outputs/apk/release/app-release.apk
 
 ---
 
-## ⚙️ Requirements Sistem
+## Requirements Sistem
 
 - **Android Version**: Android 7.0+ (API 24+)
 - **Storage**: Min 50 MB free space
@@ -216,7 +216,7 @@ adb install app/build/outputs/apk/release/app-release.apk
 
 ---
 
-## ⚙️ Pengaturan Aplikasi
+## Pengaturan Aplikasi
 
 ### Buka Settings:
 1. Menu → Settings
@@ -304,11 +304,11 @@ adb install app/build/outputs/apk/release/app-release.apk
 
 ---
 
-## 📞 Bantuan & Support
+## Bantuan & Support
 
-- Email: [support@catatankeuangan.com]
-- Report Issues: https://github.com/afadh/CatatanKeuanganPribadi/issues
-- 💬 Discussion: https://github.com/afadh/CatatanKeuanganPribadi/discussions
+- Email: [afadhilah2004@gmail.com](mailto:afadhilah2004@gmail.com)
+- Report Issues: [Issues](../../issues)
+- Discussion: [Discussions](../../discussions)
 - Feedback: In-app feedback form
 
 ---
@@ -322,6 +322,3 @@ Kunjungi YouTube channel kami untuk tutorial lengkap:
 - Advanced features
 
 ---
-
-**Last Updated**: April 29, 2026  
-**Version**: 1.0.0

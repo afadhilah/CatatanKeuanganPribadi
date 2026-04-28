@@ -9,18 +9,18 @@ Daftar lengkap semua dokumentasi tersedia di Wiki.
 ### **Untuk Pengguna Aplikasi**
 Mulai dari sini jika Anda ingin menggunakan aplikasi:
 
-1. **[Installation](Installation.md)** START HERE
+1. **[Installation](Installation)** START HERE
    - Download APK
    - Install di Android
    - Setup awal
    - Tutorial lengkap
 
-2. **[Features](Features.md)**
+2. **[Features](Features)**
    - Deskripsi fitur lengkap
    - Cara menggunakan setiap fitur
    - Tips & tricks
 
-3. **[FAQ](FAQ.md)**
+3. **[FAQ](FAQ)**
    - Pertanyaan yang sering diajukan
    - Troubleshooting
    - Support
@@ -30,18 +30,18 @@ Mulai dari sini jika Anda ingin menggunakan aplikasi:
 ### **Untuk Developer**
 Mulai dari sini jika Anda ingin mengembangkan aplikasi:
 
-1. **[Development Setup](Development-Setup.md)** START HERE
+1. **[Development Setup](Development-Setup)** START HERE
    - Install dependencies
    - Setup environment
    - Build & run
    - Test locally
 
-2. **[Architecture](Architecture.md)**
+2. **[Architecture](Architecture)**
    - Clean Architecture + MVVM
    - Layer breakdown
    - Data flow
 
-3. **[Project Structure](Project-Structure.md)**
+3. **[Project Structure](Project-Structure)**
    - Folder organization
    - File locations
    - Module breakdown
@@ -65,7 +65,7 @@ Mulai dari sini untuk build & deployment:
 
 ---
 
-## 📄 Daftar Lengkap File
+## Daftar Lengkap File
 
 ### User-Focused Docs
 
@@ -92,7 +92,7 @@ Mulai dari sini untuk build & deployment:
 
 ---
 
-## 🗂️ File Descriptions
+## File Descriptions
 
 ### [Home.md](Home.md)
 **Wiki homepage** - Overview dan navigation ke seluruh wiki.
@@ -280,10 +280,10 @@ GitHub-Actions.md
 ## Quick Links
 
 ### Official Resources
-- **GitHub Repository**: https://github.com/afadh/CatatanKeuanganPribadi
-- **Issues**: https://github.com/afadh/CatatanKeuanganPribadi/issues
-- **Discussions**: https://github.com/afadh/CatatanKeuanganPribadi/discussions
-- **Releases**: https://github.com/afadh/CatatanKeuanganPribadi/releases
+- [**GitHub Repository**](../)
+- [**Issues**](../issues)
+- [**Discussions**](../discussions)
+- [**Releases**](../discussions)
 
 ### External Resources
 - **Android Developer**: https://developer.android.com/
@@ -304,10 +304,10 @@ GitHub-Actions.md
 
 ## Tips
 
-- 📌 Bookmark frequently used pages
+- Bookmark frequently used pages
 - Use Ctrl+F untuk search dalam halaman
 - Click links untuk navigate antar pages
-- 💬 Ask questions di GitHub Discussions
+- Ask questions di GitHub Discussions
 - Report issues di GitHub Issues
 
 ---
@@ -324,12 +324,12 @@ Wiki di-update regularly dengan:
 
 ---
 
-## 📞 Need Help?
+## Need Help?
 
 Tidak menemukan jawaban?
-- 💬 Ask di [GitHub Discussions](../../discussions)
+- Ask di [GitHub Discussions](../../discussions)
 - Report issue di [GitHub Issues](../../issues)
-- Email: support@catatankeuangan.com
+- Email: afadhilah2004@gmail.com
 
 ---
 

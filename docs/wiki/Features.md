@@ -1,6 +1,6 @@
 # Fitur Aplikasi
 
-CatatanKeuanganPribadi dilengkapi dengan fitur-fitur lengkap untuk mengelola keuangan pribadi Anda.
+Artharum dilengkapi dengan fitur-fitur lengkap untuk mengelola keuangan pribadi Anda.
 
 ---
 
@@ -225,5 +225,3 @@ Fitur untuk transfer uang antar akun pribadi.
 - **Web dashboard**
 
 ---
-
-**Last Updated**: April 29, 2026

@@ -1,6 +1,6 @@
 # Arsitektur Aplikasi
 
-CatatanKeuanganPribadi menggunakan **Clean Architecture** yang dikombinasikan dengan **MVVM (Model-View-ViewModel)** pattern.
+Artharum menggunakan **Clean Architecture** yang dikombinasikan dengan **MVVM (Model-View-ViewModel)** pattern.
 
 ---
 
@@ -257,5 +257,3 @@ domain (business logic - no Android dependency)
 - [Kotlin Coroutines](https://kotlinlang.org/docs/coroutines-overview.html)
 
 ---
-
-**Last Updated**: April 29, 2026
