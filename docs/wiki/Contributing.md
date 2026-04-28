@@ -207,7 +207,7 @@ Bagaimana reviewer bisa test changes?
 
 ---
 
-## 📝 Code Style
+## Code Style
 
 ### Kotlin Style Guide
 
@@ -365,7 +365,7 @@ class TransactionScreenTest {
 
 ---
 
-## 📚 Documentation
+## Documentation
 
 ### Update Documentation
 

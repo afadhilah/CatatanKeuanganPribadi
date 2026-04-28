@@ -221,7 +221,7 @@ UI Update
 
 ---
 
-## 📊 Module Dependencies
+## Module Dependencies
 
 ```
 app (main application module)
@@ -239,7 +239,7 @@ domain (business logic - no Android dependency)
 
 ---
 
-## 🔐 Best Practices
+## Best Practices
 
 1. **Separation of Concerns** - Setiap layer punya tanggung jawab sendiri
 2. **Unidirectional Data Flow** - Data mengalir satu arah
@@ -249,7 +249,7 @@ domain (business logic - no Android dependency)
 
 ---
 
-## 📚 Resource Tambahan
+## Resource Tambahan
 
 - [Clean Architecture Guide](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 - [Android Architecture Patterns](https://developer.android.com/topic/architecture)

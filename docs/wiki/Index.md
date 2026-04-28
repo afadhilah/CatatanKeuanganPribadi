@@ -315,10 +315,10 @@ GitHub-Actions.md
 ## 🔄 Wiki Updates
 
 Wiki di-update regularly dengan:
-- 📝 Documentation improvements
-- 🎯 New guides & tutorials
+- Documentation improvements
+- New guides & tutorials
 - 🐛 Troubleshooting additions
-- 📊 Updated examples
+- Updated examples
 
 **Last Updated**: April 29, 2026
 

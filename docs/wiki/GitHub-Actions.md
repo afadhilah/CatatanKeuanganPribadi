@@ -36,7 +36,7 @@ on:
 **Trigger Events:**
 - Push ke branch: `main`, `master`, `develop`
 - Push tag dengan format `v*` (contoh: `v1.0.0`)
-- ✅ Manual trigger via workflow_dispatch button
+- Manual trigger via workflow_dispatch button
 
 #### Jobs:
 
@@ -84,7 +84,7 @@ on:
 #### Outputs:
 - 📦 **APK**: `app-release.apk` (untuk manual install)
 - 📦 **AAB**: `app-release.aab` (untuk Google Play Store)
-- 📝 **Release Notes**: Auto-generated dari commits
+- **Release Notes**: Auto-generated dari commits
 
 ---
 
@@ -312,7 +312,7 @@ Build took too long
 
 ---
 
-## 📊 Build Performance
+## Build Performance
 
 ### Current Performance:
 - **First Build**: ~10-15 menit (download SDK)
@@ -363,12 +363,12 @@ Commits digunakan untuk auto-generate release notes.
 
 ---
 
-## 📝 Release Notes Template
+## Release Notes Template
 
 Auto-generated release notes akan include:
 - 🎉 **Features** - Fitur baru
 - 🐛 **Bug Fixes** - Bug yang di-fix
-- 📚 **Documentation** - Doc changes
+- **Documentation** - Doc changes
 - 🔄 **Chores** - Maintenance tasks
 
 ---

@@ -59,7 +59,7 @@ adb install app/build/outputs/apk/release/app-release.apk
 
 ---
 
-## 🎯 Setup Awal Aplikasi
+## Setup Awal Aplikasi
 
 ### 1. **Buka Aplikasi**
    - Tap app icon di home screen
@@ -81,7 +81,7 @@ adb install app/build/outputs/apk/release/app-release.apk
 
 ---
 
-## 💰 Penggunaan Aplikasi
+## Penggunaan Aplikasi
 
 ### 1. **Mencatat Transaksi Pertama**
 
@@ -309,7 +309,7 @@ adb install app/build/outputs/apk/release/app-release.apk
 - 📧 Email: [support@catatankeuangan.com]
 - 🐛 Report Issues: https://github.com/afadh/CatatanKeuanganPribadi/issues
 - 💬 Discussion: https://github.com/afadh/CatatanKeuanganPribadi/discussions
-- 📱 Feedback: In-app feedback form
+- Feedback: In-app feedback form
 
 ---
 
