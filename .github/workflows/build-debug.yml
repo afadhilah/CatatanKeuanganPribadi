@@ -20,7 +20,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          java-version: '11'
+          java-version: '21'
           distribution: 'temurin'
           cache: gradle
 
@@ -29,6 +29,11 @@ jobs:
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
+
+      - name: Accept Android Licenses
+        run: |
+          echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+        continue-on-error: true
 
       - name: Build Debug APK
         run: ./gradlew assembleDebug --no-daemon
