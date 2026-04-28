@@ -2,16 +2,16 @@
 
 Aplikasi Android untuk mencatat dan mengelola keuangan pribadi dengan fitur transaksi, budget, dan statistik.
 
-## 📱 Features
+## Features
 
-✅ **Transaksi** - Catat income, expense, dan transfer  
-✅ **Dashboard** - Ringkasan saldo, income, dan expense  
-✅ **Daftar Transaksi** - Filter by period, account, category, search  
-✅ **Budget** - Set budget per kategori dan monitor usage  
-✅ **Statistik** - Visualisasi distribusi pengeluaran per kategori  
-✅ **Multiple Accounts** - Manage cash, bank, e-wallet accounts  
+**Transaksi** - Catat income, expense, dan transfer  
+**Dashboard** - Ringkasan saldo, income, dan expense  
+**Daftar Transaksi** - Filter by period, account, category, search  
+**Budget** - Set budget per kategori dan monitor usage  
+**Statistik** - Visualisasi distribusi pengeluaran per kategori  
+**Multiple Accounts** - Manage cash, bank, e-wallet accounts  
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Language**: Kotlin 2.0.21
 - **Architecture**: Clean Architecture + MVVM
@@ -22,7 +22,7 @@ Aplikasi Android untuk mencatat dan mengelola keuangan pribadi dengan fitur tran
 
 ---
 
-## 📋 Quick Start
+## Quick Start
 
 ### Prerequisites
 - JDK 21 (not Java 25!)
@@ -55,7 +55,7 @@ See build troubleshooting: [README_BUILD.md](README_BUILD.md)
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 CatatanKeuanganPribadi/
@@ -82,7 +82,7 @@ CatatanKeuanganPribadi/
 
 ---
 
-## 🚀 Running the App
+## Running the App
 
 ### Quickest Way
 
@@ -103,7 +103,7 @@ Both scripts:
 
 ---
 
-## 🧪 Testing
+## Testing
 
 ### Unit Tests
 ```powershell
@@ -117,7 +117,7 @@ Both scripts:
 
 ---
 
-## 📚 Documentation
+## Documentation
 
 - **[README_DEVICE.md](README_DEVICE.md)** - Run on physical Android device  
 - **[README_EMULATOR.md](README_EMULATOR.md)** - Run on Android Emulator  
@@ -126,7 +126,7 @@ Both scripts:
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 ### JDK Version
 Default JDK: **21** (configured in [gradle.properties](gradle.properties))
@@ -140,7 +140,7 @@ If you have Java 25 installed (incompatible), the build automatically uses JDK 2
 
 ---
 
-## 📦 Dependencies
+## Dependencies
 
 Key libraries:
 - `androidx.lifecycle:lifecycle-runtime-compose` - Lifecycle & Compose integration
@@ -153,7 +153,7 @@ Full list: [gradle/libs.versions.toml](gradle/libs.versions.toml)
 
 ---
 
-## 🐛 Known Issues
+## Known Issues
 
 - Emulator slow on low-end PC? → Allocate more RAM in AVD config (4GB+)
 - Compile error with Java 25? → JDK 21 is automatically selected via gradle.properties
@@ -161,13 +161,13 @@ Full list: [gradle/libs.versions.toml](gradle/libs.versions.toml)
 
 ---
 
-## 📝 License
+## License
 
 This is a personal finance tracker app created for educational purposes.
 
 ---
 
-## ❓ FAQ
+## FAQ
 
 **Q: Can I run without emulator?**  
 A: Yes! Connect Android device via USB, enable USB Debugging, and run `.\run-device.ps1`
@@ -183,7 +183,7 @@ A: Currently, data is stored locally in SQLite. Export feature coming soon.
 
 ---
 
-## 🔗 Useful Links
+## Useful Links
 
 - [Android Developer Docs](https://developer.android.com)
 - [Jetpack Compose Docs](https://developer.android.com/jetpack/compose)
